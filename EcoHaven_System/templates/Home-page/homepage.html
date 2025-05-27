@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/thumbnail/Homepage/homepage.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script src="/static/js-buyer/buyer.js"></script>
+    <script src="/static/js-buyer/chat.js"></script>
+
+    <title>Homepage</title>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container" id="dashboard">
+            <a href="../homepage/homepage.html"><img class="logo" src="../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+        
+        <form action="{{ url_for('search') }}" method="get" class="search-container">
+            <input class="search-bar" type="text" name="search" placeholder="Search">
+            <button class="search-btn" type="submit">
+                <img src="../../static/thumbnail/search.svg" alt="Search">
+            </button>
+        </form>
+
+        <div class="icon-container">
+            <div class="cart-icon" id="cart-link">
+               <img src="../../static/thumbnail/cart.svg" alt="">
+            </div>
+            <div class="order-icon" id="order-link" >
+                <img src="../../static/thumbnail/order-history.svg" alt="">
+             </div> 
+        </div>
+
+        
+
+        <div class="profile-container">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture" onclick="window.location.href='/buyer_dashboard/buyer_profile';"> 
+            <span id="user-name">{{ username }}</span>
+          
+            <a href=" /notification "><i class="fas fa-bell"></i></a>
+        </div>
+    </div>
+    <a class="chatbtn" href="/chat"><i class="fas fa-comments"></i> Chat</a>
+
+
+    <div class="main-container">
+        <div class="banner-container">
+            <img  src="../../static/thumbnail/banner.png" alt="">
+        </div>
+        <div class="category-container">
+            <!-- 'Gardening Tools','Outdoor Living','Home Tools','Kitchen Appliances','Furniture','Decor','Bedding','Bath','Others' -->
+            <h2 class="category-title">CATEGORIES</h2>
+            <div class="category-grid">
+                <div class="category-item">
+                    <a href="{{ url_for('category', category='Gardening Tools') }}">
+                        <img src="../../static/thumbnail/gardening tools.png" alt="Gardening Tools">
+                        <p>Gardening Tools</p>
+                    </a>
+                </div>
+                <div class="category-item">
+                    <a href="{{ url_for('category', category='Outdoor Living') }}">
+                        <img src="../../static/thumbnail/outdoor living.png" alt="Outdoor Living">
+                        <p>Outdoor Living</p>
+                    </a>
+                </div>
+                <div class="category-item">
+                    <a href="{{ url_for('category', category='Home Tools') }}">
+                        <img src="../../static/thumbnail/home tool.png" alt="Home Tools">
+                        <p>Home Tools</p>
+                    </a>
+                </div>
+                <div class="category-item">
+                    <a href="{{ url_for('category', category='Kitchen Appliances') }}">
+                        <img src="../../static/thumbnail/kitchen appliances.png" alt="Kitchen Appliances">
+                        <p>Kitchen Appliances</p>
+                    </a>
+                </div>
+                <div class="category-item">
+                    <a href="{{ url_for('category', category='Furniture') }}">
+                        <img src="../../static/thumbnail/furniture.png" alt="Furniture">
+                        <p>Furniture</p>
+                    </a>
+                </div>
+                <div class="category-item">
+                    <a href="{{ url_for('category', category='Decor') }}">
+                        <img src="../../static/thumbnail/decor.png" alt="Decor">
+                        <p>Decor</p>
+                    </a>
+                </div>
+                <div class="category-item">
+                    <a href="{{ url_for('category', category='Bedding') }}">
+                        <img src="../../static/thumbnail/bedding.png" alt="Bedding">
+                        <p>Bedding</p>
+                    </a>
+                </div>
+                <div class="category-item">
+                    <a href="{{ url_for('category', category='Bath') }}">
+                        <img src="../../static/thumbnail/bath (1).png" alt="Bath">
+                        <p>Bath</p>
+                    </a>
+                </div>
+                
+                <!-- Add more category items as needed -->
+            </div>
+        </div>
+
+        <div class="product-container">
+            {% if products %}
+                {% for product in products %}   
+                    <a href="{{ url_for('productOverview', product_id=product.Id) }}">
+                        <div class="product-card" action="/buyer_dashboard/productOverview/<int:product_id>>" >
+                            <div class="product-image-container">
+                                <img class="product-img" src="{{ url_for('static', filename='uploads/' + product.Image) }}" alt="Product Image">
+                            </div>
+
+                            <div class="product-name">
+                               <span class="name">{{ product.Product_Name }}</span> 
+                            </div>
+
+                            <div class="product-price">
+                                <p>&#8369; {{ product.Price }}</p>
+                            </div>
+
+                            <div class="review-container">
+                                <div class="sold-container">
+                                    {{ product.total_sold }} sold
+                                </div>
+
+                                <div class="rating-container">
+                                    <img src="../../static/thumbnail/star.svg" alt="Rating">
+                                    {{ product.Rating }}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            {% else %}
+                <p>No products available.</p>
+            {% endif %}
+      
+        </div>
+        <div class="pagination">
+            <!-- 'Previous' Button -->
+            {% if current_page > 1 %}
+                <a href="{{ url_for('buyer_dashboard', page=current_page - 1) }}">
+                    <button><i class="fas fa-angle-left"></i></button>
+                </a>
+            {% endif %}
+        
+            <!-- Page Buttons -->
+            {% for page in range(1, total_pages + 1) %}
+                <a href="{{ url_for('buyer_dashboard', page=page) }}">
+                    <button {% if page == current_page %}class="active"{% endif %}>
+                        {{ page }}
+                    </button>
+                </a>
+            {% endfor %}
+        
+            <!-- 'Next' Button -->
+            {% if current_page < total_pages %}
+                <a href="{{ url_for('buyer_dashboard', page=current_page + 1) }}">
+                    <button><i class="fas fa-angle-right"></i></button>
+                </a>
+            {% endif %}
+        </div>
+        
+        
+        
+           
+    </div>
+
+    
+    
+    <footer class="footer-container">
+        <div class="footer-logo">
+            <img src="../../static/thumbnail/logo.png.png" alt="EcoHAven-Logo">
+        </div>
+
+        <div class="info-container">
+            <div class="devteam-container">
+                <ul>
+                    <li>EcoHaven-IT Development Team</li>
+                    <li>Elca, Eirich M. </li>
+                    <li>Oliveros, Roldan A.</li>
+                    <li>Villodo, Nina Clarisse R.</li>
+                    <li> Javier, Jonamie C.</li>
+                </ul>
+            </div>
+            <div class="social-container">
+                <ul>
+                    <li>Contact Us</li>
+                    <li><a href="#"> <i class="fab fa-facebook"></i> EcoHaven_Official</a></li>
+                    <li><a href="#"> <i class="fab fa-instagram"></i> @EcoHaven</a></li>
+                    <li><a href="#"> <i class="fas fa-envelope"></i> EcoHaven@gmai.com</a></li>
+                    <li><a href="#"> <i class="fab fa-tiktok"></i> EcoHaven_ph</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copy-right">
+            <p>© 2024 EcoHaven. All Rights Reserved .</p>
+        </div>
+        
+    </footer>
+</body>
+</html>

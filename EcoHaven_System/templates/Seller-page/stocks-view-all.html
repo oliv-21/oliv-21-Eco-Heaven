@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../static/thumbnail/seller-page/stocks-view-all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <a href="../seller-page/dashboard.html"><img class="logo" src="../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+        <div class="profile-container" onclick="window.location.href='/seller/profile'"> 
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture"> 
+            <span id="user-name">{{ username }}</span>
+            <a href=" /seller-notification "><i class="fas fa-bell"></i></a>
+         </div>  
+    </div>
+    <a class="chatbtn" href=" /chat-seller "><i class="fas fa-comments"></i> Chat</a>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/seller_dashboard"><li   >Dashboard</li></a>
+                <a href="/seller-page/products"><li    >Products</li></a>
+                <a href="/seller/update-stock"><li class="active" > Stocks</li> </a>
+                <a href="/seller/sales"><li  >Sales</li></a>
+                <a href="/seller/orders"><li  >Orders</li></a>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->   
+        <main class="main-content">
+            <div class="sub-container">
+                <a class="back" href="/seller/update-stock"><i class="fa-solid fa-arrow-left"></i> Back</a>
+                <div class="product-container">
+                    <div class="product-image   ">
+                        <img src="{{ url_for('static', filename='uploads/' + productpic) }}" alt="">
+                        
+                    </div>
+
+                    <div class="product-name">   
+                        <p> <span>{{ productName }} </span></p>
+                    </div>
+                </div>
+
+               
+                <div class="variation-container">           
+                    <div class="header-container">
+                        <h3>Stock Management</h3>                
+                    </div>
+                </div>
+
+                {% if variations %}
+                    {% for variation in variations %}
+                        <div class="row-container">
+                            {% if variation.color %}
+                            <div class="variation-value">
+                                <span id="variation-value">{{ variation.color }}</span>
+                            </div>
+                            {% endif %}
+
+                            {% for size in variation.sizes %}
+                            <div class="row-container2">
+                                <form  action="/seller/stock-variation-management/{{product_id}}" method="POST">
+                                    {% if size.size %}
+                                    <div class="row-sub-container">
+                                        <div class="size-container">
+                                            <span>{{ size.size }}</span>
+                                        </div>
+                                        <input type="hidden" name="size" value=" {{size.size}}">
+                                    {% endif %}
+                                    <div class="row-sub-container" >
+                                        <div class="stocks-container">
+                                        <span id="stock-value">{{ size.stock }} pcs left</span>
+                                        </div>
+                                        
+                                        <div class="quantity-container">
+                                            <input type="number"  name="quantity" class="quantity" value="{{ size.stock }}" >
+                                        </div>
+                                        
+                                        <div class="update-container">
+                                            <button type="submit" class="update-btn">Update</button>
+                                        </div>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                <div class="row-container">
+                    
+                    <div class="variation-value">
+                        <span id="variation-value">NONE</span>
+                    </div>
+                    
+
+                    
+                    <div class="row-container2">
+                        
+                        <div class="row-sub-container">
+                            <div class="size-container">
+                                <span></span>
+                            </div>
+                        
+                        
+                        <div class="stocks-container">
+                            <span id="stock-value">{{Stock_Quantity}} pcs left</span>
+                        </div>
+                        <form action="/seller/stock-management/{{product_id}}" method="POST">
+                            <div class="row-sub-container" >
+                                <div class="quantity-container">
+                                    <input type="number"  name="quantity" class="quantity" value="0" >
+                                </div>
+                                
+                                <div class="update-container">
+                                    <button type="submit" class="update-btn">Update</button>
+                                </div>
+                            </div>
+                            
+                        </form>
+                    </div>
+                    
+                </div>
+                {% endif %}
+
+            </div>    
+        </main>
+    </div>  
+</body>
+</html>

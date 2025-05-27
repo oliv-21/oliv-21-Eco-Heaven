@@ -1,0 +1,535 @@
+@app.route('/registerbuyer', methods=['POST'])
+def registerbuyer():
+    user_id = request.form['user_id']  
+    email = request.form['email']
+    full_name = request.form['fullName']
+    mobile_number = request.form['number']
+    gender = request.form['gender']
+    birthdate = f"{request.form['year']}-{request.form['month']}-{request.form['day']}"
+    address = request.form['address']
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    try:
+        # Insert into buyers table
+        query = "INSERT INTO buyers (user_id, email, full_name, mobile_number, gender, birthdate, address) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(query, (user_id, email, full_name, mobile_number, gender, birthdate, address))
+        connection.commit()
+        
+        return redirect(url_for('login'))  
+
+    except mysql.connector.Error as err:
+        connection.rollback()
+        return redirect(url_for('createBuyerForm', user_id=user_id, error=f"Error: {err}"))
+    finally:
+        cursor.close()
+        connection.close()
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    # Get form data
+    email = request.form['email']
+    password = request.form['password']
+    user_type = int(request.form['user_type']) 
+
+
+    #hashed_password = generate_password_hash(password)
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    #alisin
+    try:
+        query = "INSERT INTO users (email, password, role_id) VALUES (%s, %s, %s)"
+        cursor.execute(query, (email, password, user_type))
+        user_id = cursor.lastrowid  
+        connection.commit()
+
+        
+        if user_type == 1:
+            return redirect(url_for('createBuyerForm', user_id=user_id)) 
+        elif user_type == 2:
+            return redirect(url_for('createSellerForm', user_id=user_id))  
+
+    except mysql.connector.Error as err:
+        connection.rollback()
+        return redirect(url_for('signup', error=f"Error: {err}"))
+    finally:
+        cursor.close()
+        connection.close()
+
+
+
+@app.route('/registerseller', methods=['POST'])
+def registerseller(): 
+    email = request.form['email']
+    full_name = request.form['fullName']
+    shop_name = request.form['ShopName']  
+    mobile_number = request.form['number']  
+    pickup_address = request.form['address'] 
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    try:
+        user_id = request.form['user_id']  
+        query = """
+            INSERT INTO sellers (user_id, email, full_name, shop_name, mobile_number, pickup_address) 
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        cursor.execute(query, (user_id, email, full_name, shop_name, mobile_number, pickup_address))
+        connection.commit()
+        
+        return redirect(url_for('login'))  
+
+    except mysql.connector.Error as err:
+        connection.rollback()
+        return redirect(url_for('createSellerForm', user_id=user_id, error=f"Error: {err}"))
+    
+    finally:
+        cursor.close()
+        connection.close()
+
+
+
+
+all python
+from flask import Flask, render_template, request, redirect, url_for, flash ,session
+import mysql.connector
+from werkzeug.security import generate_password_hash, check_password_hash
+import re
+import os
+from werkzeug.utils import secure_filename
+# Database configuration
+db_config = {
+    'user': 'root',
+    'password': '',  
+    'host': 'localhost',
+    'database': 'ecoheaven_db' 
+}
+
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Set a secret key for session management
+
+def get_db_connection():
+    return mysql.connector.connect(**db_config)
+
+@app.route('/')
+def login():
+    return render_template('Login-page/LoginPage.html')
+
+@app.route('/login', methods=['POST'])
+def do_login():
+    if request.method == 'POST':
+        email = request.form['username']
+        password = request.form['password']
+        
+        connection = get_db_connection()
+        cursor = connection.cursor(dictionary=True)  # Use dictionary for better access
+
+        # Query to retrieve the user by email
+        cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+        user = cursor.fetchone()
+        cursor.close()
+        connection.close()
+
+        if user:
+            # Check password
+            if user['password'] == password:
+                session['id'] = user['user_id']
+                session['role'] = user['role_id']
+                return redirect(url_for('dashboard'))
+            else:
+                # If the password is incorrect
+                return redirect(url_for('login', error="Invalid email or password"))
+        else:
+            # If the user is not found
+            return redirect(url_for('login', error="Invalid email or password"))
+
+    # If login fails
+    return redirect(url_for('login', error="Invalid email or password"))
+
+
+@app.route('/dashboard')
+def dashboard():
+    if 'id' in session:
+        if session['role'] == 1:  
+            return redirect(url_for('buyer_dashboard'))
+        elif session['role'] == 2: 
+            return redirect(url_for('seller_dashboard'))
+    else:
+        return redirect(url_for('login', error="dashboard"))
+
+
+
+
+#all register
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    # Get form data
+    emailreg = request.form['email']
+    password = request.form['password']
+    user_type = int(request.form['user_type'])
+    
+    try:
+        if user_type == 1:
+            return redirect(url_for('createBuyerForm')) 
+        elif user_type == 2:
+            return redirect(url_for('createSellerForm',emailreg=emailreg,password=password))  
+
+    except Exception as err:
+        return redirect(url_for('signup', error=f"Error: {err}"))
+
+ #buyer
+@app.route('/createBuyerForm')
+def createBuyerForm():
+    emailreg = request.args.get('emailreg')  
+    return render_template('Login-page/LoginPage-buyerForm.html', emailreg=emailreg)
+
+@app.route('/registerbuyer', methods=['POST'])
+def registerbuyer():
+    email = request.form['email']
+    full_name = request.form['fullName']
+    mobile_number = request.form['number']
+    gender = request.form['gender']
+    birthdate = f"{request.form['year']}-{request.form['month']}-{request.form['day']}"
+    address = request.form['address']
+    password = request.form['password']  # Assuming password input in buyer form
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    try:
+        #user_id = insert_user(email, password, 1)  # 1 for buyer user type
+
+        # Insert into buyers table
+        query = "INSERT INTO buyers (user_id, email, full_name, mobile_number, gender, birthdate, address) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        #cursor.execute(query, (user_id, email, full_name, mobile_number, gender, birthdate, address))
+        connection.commit()
+        
+        return redirect(url_for('login'))  
+
+    except Exception as err:
+        connection.rollback()
+        return redirect(url_for('createBuyerForm',  error=f"Error: {err}"))
+    finally:
+        cursor.close()
+        connection.close()
+
+
+
+
+
+#seller
+
+@app.route('/createSellerForm')
+def createSellerForm():
+    password = request.args.get('password')
+    emailreg = request.args.get('emailreg')  
+    return render_template('Login-page/LoginPage-sellerForm.html', emailreg=emailreg,password=password)
+
+@app.route('/registerseller', methods=['POST'])
+def registerseller(): 
+    # Get form data
+    email1 = request.form['email']
+    email2 = request.form['emailreg']
+    password = request.form['password']  
+    if email1==email2:
+        email = request.form['email'] 
+        full_name = request.form['fullName']
+        shop_name = request.form['ShopName']
+        mobile_number = request.form['number']
+        pickup_address = request.form['address']
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+    else:
+        return redirect(url_for('createSellerForm', error="not the same Email"))
+
+
+    try:
+        # Insert into users table first (role_id = 2 for seller)
+        query_user = "INSERT INTO users (email, password, role_id) VALUES (%s, %s, %s)"
+        cursor.execute(query_user, (email, password, 2))
+        user_id = cursor.lastrowid  # Get the inserted user ID
+
+        # Insert into sellers table
+        query_seller = """
+            INSERT INTO sellers (user_id, email, full_name, shop_name, mobile_number, pickup_address) 
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        cursor.execute(query_seller, (user_id, email, full_name, shop_name, mobile_number, pickup_address))
+        connection.commit()  # Commit both inserts
+        
+        return redirect(url_for('login'))  # Redirect to login after successful registration
+
+    except mysql.connector.Error as err:
+        connection.rollback()  # Roll back if there is an error
+        return redirect(url_for('signup', error=f"Error: {err}"))
+    
+    finally:
+        cursor.close()
+        connection.close()
+
+
+
+@app.route('/seller_dashboard')
+def seller_dashboard():
+    return render_template('Seller-page/dashboard.html')
+
+
+
+
+#add product
+
+@app.route('/seller-page/products')
+def sellerpage_products():
+    return render_template('Seller-page/products.html')
+
+@app.route('/seller-page/add-product')
+def sellerpage_addproducts():
+    return render_template('Seller-page/add-product.html')
+
+
+@app.route('/seller/add-product', methods=['GET', 'POST'])
+def upload_product():
+    if 'image' not in request.files:
+        return 'No image part'
+    
+    image = request.files['image']
+    
+    if image.filename == '':
+        return 'No selected file'
+    
+    if image:
+        # Secure the filename to prevent vulnerabilities
+        filename = secure_filename(image.filename)
+
+        # Read the image data
+        image_data = image.read()  # Read the image as binary data
+        
+        # Get the other form data
+        product_name = request.form['product-name']
+        price = request.form['price']
+        description = request.form['description']
+        seller_id = session.get('user_id')  # Assuming seller is logged in and session is used for user tracking
+
+        # Save product details into the database
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        try:
+            # Insert product information into the database
+            query = """INSERT INTO products (Product_Name, Url_Slug, Cat_Id, Description, Price, Stock_Quantity, Status, Seller_Id, Image)
+                       VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+            url_slug = product_name.lower().replace(" ", "-")  # Simple URL slug generation
+            cursor.execute(query, (product_name, url_slug, None, description, price, 0, 'active', seller_id, image_data))
+            conn.commit()
+
+            return redirect(url_for('sellerpage_products'))  
+        except mysql.connector.Error as err:
+            conn.rollback()
+            return f"Error: {err}"
+        finally:
+            cursor.close()
+            conn.close()
+
+    return redirect(url_for('sellerpage_products'))
+
+
+
+
+
+@app.route('/signup')
+def signup():
+    return render_template('Login-page/LoginPage-signup.html')
+
+@app.route('/forgotPassword')
+def forgotPassword():
+    return render_template('Login-page/LoginPage-forgotPassword.html')
+
+@app.route('/createAccountBuyer')
+def createAccountBuyer():
+    return render_template('Login-page/LoginPage-createAccountBuyer.html')
+
+@app.route('/createAccountSeller')
+def createAccountSeller():
+    return render_template('Login-page/LoginPage-createAccountSeller.html')
+
+
+
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+#homepage
+
+
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/thumbnail/Homepage/homepage.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img class="logo" src="../../static/thumbnail/logo.png.png" alt="">
+        </div>
+        
+        <div class="search-container">
+           <input class="search-bar" type="text" placeholder="Search">
+           <button class="search-btn">
+                <img src="../../static/thumbnail/search.svg" alt="">
+           </button>
+        </div>
+
+        <div class="icon-container">
+            <div class="cart-icon">
+               <img src="../../static/thumbnail/cart.svg" alt="">
+            </div>
+
+            <div class="profile-icon">
+               <img src="../../static/thumbnail/eirich2.jpg" alt="">
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="banner-container">
+            <img  src="../../static/thumbnail/banner.png" alt="">
+        </div>
+
+        <div class="category-container">
+            <h2 class="category-title">CATEGORIES</h2>
+            <div class="category-grid">
+                <div class="category-item">
+                    <img src="../../static/thumbnail/gardening tools.png" alt="Home Tools">
+                    <p>Gardening Tools</p>
+                </div>
+                <div class="category-item">
+                    <img src="../../static/thumbnail/outdoor living.png" alt="Home Decor">
+                    <p>Outdoor Living</p>
+                </div>
+                <div class="category-item">
+                    <img src="../../static/thumbnail/home tool.png" alt="Furniture">
+                    <p>Home tools</p>
+                </div>
+                <div class="category-item">
+                    <img src="../../static/thumbnail/kitchen appliances.png" alt="Lighting">
+                    <p>Kitchen Appliances</p>
+                </div>
+                <div class="category-item">
+                    <img src="../../static/thumbnail/furniture.png" alt="Storage">
+                    <p>Furniture</p>
+                </div>
+                <div class="category-item">
+                    <img src="../../static/thumbnail/decor.png" alt="Cleaning Tools">
+                    <p>Decor</p>
+                </div>
+                <div class="category-item">
+                    <img src="../../static/thumbnail/bedding.png" alt="Garden Tools">
+                    <p>Bedding</p>
+                </div>
+                <div class="category-item">
+                    <img src="../../static/thumbnail/bath (1).png" alt="Planters & Pots">
+                    <p>Bath</p>
+                </div>
+                <!-- Add more category items as needed -->
+            </div>
+        </div>
+
+        <div class="product-container">
+            {% if products %}
+                    {% for product in products %}
+                        <div class="product-card">
+                            <div class="product-image-container">
+                                <img class="product-img" src="data:image/jpeg;base64,{{ product.Image | b64encode }}" alt="Product Image">
+                            </div>
+
+                            <div class="product-name">
+                                {{ product.Product_Name }}
+                            </div>
+
+                            <div class="product-price">
+                                {{ product.Price }}
+                            </div>
+
+                            <div class="review-container">
+                                <div class="sold-container">
+                                    {{ product.Sold }} sold
+                                </div>
+
+                                <div class="rating-container">
+                                    <img src="../../static/thumbnail/star.svg" alt="Rating">
+                                    {{ product.Rating }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No products available.</p>
+                {% endif %}  
+        </div>
+
+    </div>
+       
+</body>
+</html>
+
+
+@app.route('/seller_dashboard')
+def seller_dashboard():
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    
+    try:
+        cursor.execute("SELECT * FROM users WHERE user_id = %s", (session['id'],))
+        user = cursor.fetchone()
+        if user:
+            session['user_id'] = user['user_id']  
+            username = user['email']  
+        else:  
+            username = '' 
+    finally:
+        cursor.close()
+        connection.close()   
+    return render_template('Seller-page/dashboard.html',username=username)
+
+
+checkbox and input
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkbox Enable/Disable Input</title>
+    <script>
+        // JavaScript function to enable/disable input
+        function toggleInput() {
+            const checkbox = document.getElementById('myCheckbox');
+            const inputField = document.getElementById('myInput');
+
+            // Enable input if checkbox is checked, otherwise disable it
+            inputField.disabled = !checkbox.checked;
+        }
+    </script>
+</head>
+<body>
+    <h1>Checkbox and Input Example</h1>
+    <label>
+        <input type="checkbox" id="myCheckbox" onclick="toggleInput()"> Enable Input
+    </label><br><br>
+
+    <label for="myInput">Input Field:</label>
+    <input type="text" id="myInput" disabled>
+</body>
+</html>

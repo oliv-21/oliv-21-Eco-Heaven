@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../static/thumbnail/Admin-page/account-management/buyer-approval-details.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <a href="../seller-page/dashboard.html"><img class="logo" src="../../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+
+        <div class="profile-container">
+            <img class="profile-img" src="../../../static/thumbnail/eirich2.jpg" alt="">
+            <span id="user-name">Admin</span>
+        </div>       
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/admin_dashboard"><li>Dashboard</li></a>
+                <li class="dropdown">
+                    Account Management
+                    <ul class="dropdown-menu">
+                        <a href="/admin_dashboard/account-management"><li >Seller Account </li></a>
+                        <a href=""><li class="active">Rider Account </li></a>
+                    </ul>
+                </li>                
+                <a href="/admin_dashboard/blocked-list"><li>Blocked List</li></a>
+                <a href="/admin_dashboard/report"><li>Report</li></a>
+                <a href="/admin_sales"><li>Sales </li></a>
+                <a href="/logout" onclick="return confirm('Are you sure you want to logout?')" ><li class="logout">Logout</li></a>
+            </ul>
+        </nav>
+
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="form-container">
+                <a class="back" href=""><i class="fa-solid fa-arrow-left"></i> Back</a>
+                {% for user in users_data %}
+                    <div class="form-section">
+                        <h2>Personal Information</h2>
+                        <div class="form-row">
+                            <label>First Name:</label>
+                            <span id="first-name">{{ user.Fname }}</span>
+                        </div>
+                        <div class="form-row">
+                            <label>Middle Name:</label>
+                            <span id="middle-name">{{ user.Mname}}</span>
+                        </div>
+                        <div class="form-row">
+                            <label>Last Name:</label>
+                            <span id="last-name">{{ user.Lname }}</span>
+                        </div>
+                        <div class="form-row">
+                            <label>Gender:</label>
+                            <span id="gender">{{ user.gender }}</span>
+                        </div>
+                        <div class="form-row">
+                            <label>Birthday:</label>
+                            <p><span id="birthday">{{ user.birthdate }}</span> </p>
+                        </div>
+                        <div class="form-row">
+                            <label>Mobile Number:</label>
+                            <span id="mobile-number">{{ user.mobile_number }}</span>
+                        </div>
+                        <div class="form-row">
+                            <label>Driver's License:</label>
+                            <button class="view-btn" id="view-id-btn" onclick="showIdImage('{{ user.valid_id }}')">View</button>
+                        </div>
+                        
+                        <div id="id-modal" class="modal">
+                            <span class="close" onclick="closeModal()">&times;</span>
+                            <img class="modal-content" id="id-image">
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="form-section">
+                        <h2>Address Information</h2>
+                        <div class="form-row">
+                            <label>House Number:</label>
+                            <span id="house-number">{{user.houseNo}}</span>
+                        </div>
+                        <div class="form-row">
+                            <label>Street:</label>
+                            <span id="street">{{ user.street }}</span>
+                        </div>
+                        <div class="form-row">
+                            <label>Barangay:</label>
+                            <span id="barangay">{{ user.barangay }}</span>
+                        </div>
+                        <div class="form-row">
+                            <label>City/Municipality:</label>
+                            <span id="city">{{ user.city }}</span>
+                        </div>
+                        <div class="form-row">
+                            <label>Province:</label>
+                            <span id="province">{{ user.Province }}</span>
+                        </div>
+                        <div class="form-row">
+                            <label>Postal Code:</label>
+                            <span id="postal-code">{{ user.postal_code }}</span>
+                        </div>
+                    </div>
+                
+                
+
+                    <div class="btn-container">
+                        <!-- Approve Form -->
+                        <form action="{{ url_for('approve_user_rider', user_id=user.user_id) }}" method="post" style="display: inline;" onsubmit="return confirmDelete();">
+                            <input type="hidden" name="email" value="{{ user.email }}">
+                            <button type="submit" class="block-btn">Approve</button>
+                        </form>
+                        <button type="submit"  onclick="window.location.href='/rejection-seller-form/{{ user.user_id }}'" class="delete-btn" onsubmit="return confirmReject();">Reject</button>
+                    
+                        <!-- Reject Form -->
+                        <!-- <form action="{{ url_for('reject_user_buyer', user_id=user.user_id) }}" method="post" style="display: inline;">
+                            <input type="hidden" name="email" value="{{ user.email }}">
+                            <button type="submit" class="delete-btn">Reject</button>
+                        </form> -->
+                    </div>
+                {% endfor %}
+               
+            </div>
+        </div>
+        
+        
+    </div>
+
+    <script>
+       // Function to display the modal with the uploaded ID
+        // Function to display the modal with the uploaded ID
+        function showIdImage(valid_id_path) {
+            if (valid_id_path) {
+                // Set the image source dynamically using the provided path
+                document.getElementById("id-image").src = '/static/uploads/' + valid_id_path;
+                document.getElementById("id-modal").style.display = "block";
+            } else {
+                alert("No valid ID uploaded for this user.");
+            }
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById("id-modal").style.display = "none";
+        }
+
+        function confirmDelete() {
+            return confirm("Are you sure you want to approved this user??");
+        }
+        function confirmReject() {
+            return confirm("Are you sure you want to reject this buyer?");
+        }
+
+
+
+    </script>
+    
+</body>
+</html>

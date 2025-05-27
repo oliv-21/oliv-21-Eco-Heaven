@@ -1,0 +1,337 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: roboto, Arial, Helvetica, sans-serif;
+}
+.header{
+    background-color: #ADC8EE;
+    display: flex;
+    justify-content: space-between;
+    height: 55px;
+}
+
+.logo-container{
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+}
+
+.logo{
+    width: 180px; 
+    padding-top: 10px;
+}
+
+.profile-img{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0px 15px 0px 20px;
+}
+.profile-container {
+    display: flex;
+    align-items: center;
+    width: 230px ;
+    margin: 2px;
+    padding: 5px;
+    border-radius: 5px;
+
+    a{
+        color: #133157;
+        font-size: 22px;
+        margin-left: 20px;
+
+    }
+}
+.chatbtn{
+    position: absolute;
+    background-color: #133157;
+    bottom: 5px;
+    right: 10px;
+    padding: 10px 15px;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 1000;
+
+
+    i{
+        width: 20px;
+    }
+}
+#user-name {
+    font-size: 16px;
+    font-weight: 500;
+    margin-right: 5px;
+    color: #133157
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 55px); /* Full height minus the header */
+    overflow: hidden; /* Prevent full page scrolling */
+}
+
+/* Sidebar */
+.sidebar {
+    width: 20%;
+    background-color: #ADC8EE;
+    color: white;
+    padding: 40px 20px 0px 20px;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 20px;
+    cursor: pointer;
+    background-color: #133157;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: left;
+    transition: 0.2s;
+}
+a{
+    text-decoration: none;
+    color:#ffffff;
+}
+
+.sidebar ul li.active{
+    background-color:#FAB51C;
+    color: #133157;
+    font-weight: 600;
+}
+
+.sidebar ul li:hover{
+    opacity: 0.8;
+}
+/* Main Content */
+.main-content {
+    width: 80%;
+    background-color: #f5f8fb;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Changed to flex-start to align items to the top */
+    padding: 40px;
+    overflow-y: auto; /* Allows scrolling */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+    max-height: calc(100vh - 55px); /* Limit height to viewport */
+}
+
+
+.main-content::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+.form-container {
+    background-color: #ffffff;
+    width: 60%;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.inputField {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.inputField label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #133157;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.inputField input,
+.inputField textarea,
+.inputField select {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid #ccd1d9;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.inputField input:focus,
+.inputField textarea:focus,
+.inputField select:focus {
+    border-color: #6699ff;
+    box-shadow: 0 0 5px rgba(102, 153, 255, 0.3);
+}
+
+textarea {
+    resize: none;
+}
+
+.variation-section {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ccd1d9;
+    border-radius: 8px;
+    background-color: #f5f8fb;
+    margin-top: 20px;
+}
+
+.variation-section h3 {
+    font-size: 18px;
+    color: #133157;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.variation-option {
+    margin-bottom: 10px;
+    display: flex; /* Use flexbox to align items */
+    align-items: center; /* Center items vertically */
+}
+
+.variation-option input {
+    padding: 10px;
+    border: 1px solid #ccd1d9;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    flex: 1; /* Allow the input to take up available space */
+    margin-right: 10px; /* Space between input and button */
+}
+
+.remove-variation-btn {
+    background-color: #ff4d4d; /* Red color for the remove button */
+    color: #ffffff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.remove-variation-btn:hover {
+    background-color: #e60000; /* Darker red on hover */
+}
+
+.variation-option input:focus {
+    border-color: #6699ff;
+}
+
+.add-variation-btn {
+    background-color: #FAB51C;
+    color: #ffffff;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.add-variation-btn:hover {
+    background-color: #e0a518;
+}
+
+.create-variation-btn{
+    background-color: #FAB51C;
+    color: #133056;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 2px;
+    font-weight: 600;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #133056;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 15px;
+}
+
+.submit-btn:hover {
+    background-color: #0e2448;
+}
+
+.back {
+    color: #133056;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s ease;
+}
+
+.back i {
+    margin-right: 5px;
+}
+
+.back:hover {
+    color: #0e2448;
+}
+
+
+.variation-option {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between items */
+    align-items: center;
+    margin-bottom: 10px;
+    border: 1px solid #333333;
+    padding: 20px;
+    border-radius: 4px; 
+    margin-top: 10px;
+}
+
+.variation-option select,
+.variation-option input {
+    padding: 10px;
+    border: 1px solid #ccd1d9;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+
+}
+
+.variation-option input:focus,
+.variation-option select:focus {
+    border-color: #6699ff;
+}
+
+.remove-variation-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-self: center  ; /* Align remove button to the top */
+}
+
+.remove-variation-btn:hover {
+    background-color: #e63939;
+}

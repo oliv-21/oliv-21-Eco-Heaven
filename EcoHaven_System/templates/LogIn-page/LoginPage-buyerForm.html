@@ -1,0 +1,256 @@
+<!-- <input type="hidden" name="email1" value="{{ email1 }}">
+<input type="hidden" name="password" value="{{ password1 }}"> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/thumbnail/LogIn-page/loginPage-buyerForm.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script src="/static/js-login/error-message.js"></script>
+    <title>Document</title>
+</head> 
+<body>
+
+    <div class="main-container">
+         <div class="logo-container">
+            <img class="logo" src="../../static/thumbnail/logo.png.png" alt="" enctype="multipart/form-data">
+        </div>
+       
+        <form class="form-container" action="{{ url_for('registerbuyer') }}" method="POST" enctype="multipart/form-data">
+            <a href="/createAccountBuyer"><img class="back" src="../../static/thumbnail/arrow.png" alt=""></a>
+            <h3 class="h3">Personal Information</h3>
+            <div class="container">
+                <input type="hidden" name="email1" value="{{ email1 }}">
+                <input type="hidden" name="password" value="{{ password1 }}">
+                <div class="inputField2">
+                    <label for="fname"> First Name</label><br>
+                   <input type="text" name="fname" required><br>
+                </div>
+
+                <div class="inputField2">
+                    <label for= "Mname"> Middle Name</label><br>
+                    <input type="text" name="Mname"><br>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="inputField2">
+                    <label for="Lname"> Last Name</label><br>
+                    <input type="text"  name="Lname" required><br>
+                </div>
+
+                <div class="inputField2">
+                    <label for="gender">Gender</label><br>
+                    <select name="gender" id="gender" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="Male"> Male</option>
+                        <option value="FeMale"> Female</option>
+                        <option value="other"> Other</option>
+                    </select>
+                </div>
+            </div>
+            
+            <p>Birthday:</p>
+            <div class="container">  
+                <div class="inputField3">
+                    <select name="month" >
+                        <option value="">Month</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
+
+                <div class="inputField3">
+                    <select name="day">
+                        <option value="">Day</option>
+                        <!-- Days 1 to 31 -->
+                        <script>
+                            for (let i = 1; i <= 31; i++) {
+                                document.write('<option value="' + i + '">' + i + '</option>');
+                            }
+                        </script>
+                    </select>
+                </div>
+
+                <div class="inputField3">
+                    <select name="year" id="year">
+                        <option value="">Year</option>
+                        <!-- Years from 1900 to the current year -->
+                        <script>
+                            const currentYear = new Date().getFullYear();
+                            for (let i = currentYear; i >= 1900; i--) {
+                                document.write('<option value="' + i + '">' + i + '</option>');
+                            }
+                        </script>
+                    </select>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="inputField2">
+                    <label for="number">Mobile Number</label><br>
+                    <input 
+                        type="text" 
+                        name="number" 
+                        id="number"
+                        pattern="\d{11}" 
+                        maxlength="11" 
+                        title="Mobile number must be exactly 11 digits and contain no letters." 
+                        required>
+                </div>
+
+                <div class="inputField2">
+                    <label for="valid_id">Upload 1 valid ID:</label><br>
+                    <input type="file" id="file-upload" name="valid_id" class="file-input" required>
+                </div>                
+            </div>
+
+
+            <h3>Address Information</h3>
+            <div class="container">
+                <div class="inputField2">
+                    <label for="houseNo">House Number:</label><br>
+                    <input type="text" name="houseNo">
+                </div>
+
+                <div class="inputField2">
+                    <label for="street">Street:</label><br>
+                    <input type="text" name="street">
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="inputField2">   
+                    <label for="Province">Province:</label><br>
+                    
+                    <select id="Province" name="Province" required>
+                        <option value="" disabled selected>Select Province</option>
+                    </select>
+                </div>
+                
+                <div class="inputField2">
+                    <label for="city">City/Municipality:</label><br>
+                    
+                    <select id="city" name="city" required>
+                         <option value="">Select City/Municipality</option>
+                    </select>
+                </div>            
+            </div>
+
+            <div class="container">
+                <div class="inputField2">
+                    <label for="barangay">Barangay:</label><br>
+                    
+                    <select id="barangay" name="barangay" required>
+                        <option value="">Select Barangay</option>
+                   </select>
+                </div>
+
+                <div class="inputField2">
+                    <label for="postal">Postal Code:</label><br>
+                    <input type="text" name="postal" required>
+                </div>
+            </div>
+            <button type="submit" class="submit-btn" >Submit</button>
+        </form>
+
+    </div>
+
+</body>
+<script>
+    const provinceSelect = document.getElementById('Province');
+    const municipalitySelect = document.getElementById('city');
+    const barangaySelect = document.getElementById('barangay');
+
+    // Load provinces for the Philippines
+    function loadProvinces() {
+        provinceSelect.disabled = false;
+        municipalitySelect.disabled = true;
+        barangaySelect.disabled = true;
+
+        provinceSelect.innerHTML = '<option value="">Select Province</option>';
+        municipalitySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+        barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+        fetch('https://psgc.gitlab.io/api/provinces')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(province => {
+                    const option = document.createElement('option');
+                    option.value = province.code;
+                    option.textContent = province.name;
+                    provinceSelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error loading provinces:', error));
+    }
+
+    // Load municipalities based on selected province
+    function loadMunicipalities() {
+        const selectedProvinceCode = provinceSelect.value;
+
+        municipalitySelect.disabled = false;
+        barangaySelect.disabled = true;
+
+        municipalitySelect.innerHTML = '<option value="">Select City/Municipality</option>';
+        barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+        fetch(`https://psgc.gitlab.io/api/provinces/${selectedProvinceCode}/municipalities`)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(municipality => {
+                    const option = document.createElement('option');
+                    option.value = municipality.code;
+                    option.textContent = municipality.name;
+                    municipalitySelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error loading municipalities:', error));
+    }
+
+    // Load barangays based on selected municipality
+    function loadBarangays() {
+        const selectedMunicipalityCode = municipalitySelect.value;
+
+        barangaySelect.disabled = false;
+
+        barangaySelect.innerHTML = '<option value="">Select Barangay</option>';
+
+        fetch(`https://psgc.gitlab.io/api/municipalities/${selectedMunicipalityCode}/barangays`)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(barangay => {
+                    const option = document.createElement('option');
+                    option.value = barangay.code;
+                    option.textContent = barangay.name;
+                    barangaySelect.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Error loading barangays:', error));
+    }
+
+    // Event listeners
+    provinceSelect.addEventListener('change', loadMunicipalities);
+    municipalitySelect.addEventListener('change', loadBarangays);
+
+    // Load provinces on page load
+    window.onload = loadProvinces;
+
+
+</script>
+
+</html>

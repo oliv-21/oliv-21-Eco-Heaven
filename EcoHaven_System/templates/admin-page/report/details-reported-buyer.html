@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../../static/thumbnail/Admin-page/report/details-reported-buyer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <a href="../seller-page/dashboard.html"><img class="logo" src="../../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+
+        <div class="profile-container">
+            <img class="profile-img" src="../../../static/thumbnail/eirich2.jpg" alt="">
+            <span id="user-name">Admin</span>
+        </div>       
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/admin_dashboard"><li>Dashboard</li></a>
+                <li class="dropdown">
+                    Account Management
+                    <ul class="dropdown-menu">
+                        <a href="/admin_dashboard/account-management"><li>Seller Account </li></a>
+                        <a href="/account-management/requestAcc-rider"><li>Rider Account </li></a>
+                    </ul>
+                </li>
+                <a href="/admin_dashboard/blocked-list"><li>Blocked List</li></a>
+                <a href="/admin_dashboard/report"><li class="active">Report</li></a>
+                <a href="/admin_sales"><li>Sales </li></a>
+                <a href="/logout" onclick="return confirm('Are you sure you want to logout?')" ><li class="logout">Logout</li></a>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <a class="back" href="/admin_dashboard/reported-buyers"><i class="fa-solid fa-arrow-left"></i> Back</a>
+                {% if report%}
+
+                    <div class="report-details">
+                        <h2>Seller Report Details:</h2>
+                        
+                        <div class="buyer-info">
+                            <label for="buyer-name">Reported by Seller:</label>
+                            <span id="buyer-name">{{report.Fullname}}</span>
+                        </div>
+
+                        <div class="buyer-info">
+                            <label for="report-type">Type Of Report:</label>
+                            <span id="report-type"> {{report.report_type}}</span> 
+                        </div>
+                        
+                        <div class="report-description">
+                            <label for="description">Description:</label>
+                            <span id="description">{{report.description}} </span>
+                        </div>
+                        
+                        <div class="proof-image">
+                            <label for="proof">Proof Image:</label> 
+                            <img id="proof" src="{{ url_for('static', filename='uploads/' + report.reported_image) }}" alt="Proof image">
+                        </div>
+                    </div>
+                {% else %}
+                    <p>No report found for the given ID.</p>
+                {% endif %}
+        </main>
+    </div>
+</body>
+</html>

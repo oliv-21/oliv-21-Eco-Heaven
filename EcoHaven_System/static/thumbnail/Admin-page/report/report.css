@@ -1,0 +1,282 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: roboto, Arial, Helvetica, sans-serif;
+}
+.header{
+    background-color: #ADC8EE;
+    display: flex;
+    justify-content: space-between;
+    height: 55px;
+}
+
+.logo-container{
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+}
+
+.logo{
+    width: 180px; 
+    padding-top: 10px;
+}
+
+.profile-img{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: conver;
+    margin: 0px 15px 0px 20px;
+}
+.profile-container {
+    display: flex;
+    align-items: center;
+    width: 200px ;
+    margin: 2px;
+    padding: 5px;
+    border-radius: 5px;
+}
+#user-name {
+    font-size: 16px;
+    font-weight: 500;
+    margin-right: 5px;
+    color: #133157
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 20%;
+    background-color: #ADC8EE;
+    color: white;
+    padding: 40px 20px 0px 20px;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li{
+    padding: 20px;
+    cursor: pointer;
+    background-color: #133157;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: left;
+    transition: 0.2s;
+}
+a{
+    text-decoration: none;
+    color:#ffffff;
+}
+
+.sidebar ul li.active{
+    background-color:#FAB51C;
+    color: #133157;
+    font-weight: 600;
+}
+
+.sidebar ul li:hover{
+    opacity: 0.8;
+}
+
+/* Main Content */
+.main-content {
+    width: 80%;
+    background-color: #F0F4FA;
+    padding: 20px;
+    overflow-y: scroll; /* Allows scrolling */
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+}
+
+.main-content::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+
+/*Navbar*/
+.navbar-container{
+    background-color:#133157;
+    margin-bottom:10px;
+    border-radius: 2px;
+    width: 38%;
+}
+
+.navbar {
+    list-style-type: none;
+    display: flex;
+}
+
+.navbar li {
+    margin: 0 20px;
+}
+
+.navbar li a {
+    display: block; 
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+.nav-active{
+    color: #FAB51C;
+    font-weight: 500;
+}
+/* Table Styling */
+.table-body {
+    max-height: 80vh; /* Adjust this height as needed */
+    overflow-y: auto; /* Enables vertical scrolling */
+}
+
+.table-body::-webkit-scrollbar{
+    display: none;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    background-color: #1a3457;
+    color: #FFFFFF;
+    font-weight: 500;
+    padding: 12px;
+    text-align: left;
+    position: sticky;
+    top: 0; /* Keeps the header row sticky at the top */
+
+}
+
+tbody .user-row {
+    border-bottom: 1px solid #E0E6ED;
+    transition: background-color 0.2s;
+}
+
+tbody tr:hover {
+    background-color: #F7FAFF;
+}
+
+tbody td {
+    padding: 12px;
+    color: #133157;
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.message-icon a{
+    font-size: 22px;
+    cursor: pointer;    
+    color: #133157;
+}
+
+
+
+.profile {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+#username, #email {
+    font-weight: 500;
+    color: #333333;
+}
+
+td img {
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+td span {
+    vertical-align: middle;
+}
+
+/* Actions Column */
+.actions{
+    text-align: center;
+}
+.actions-header{
+    text-align: center;
+}
+
+.actions .block-btn {
+    background-color: #FAB51C;
+    width: 90px;
+    color: #133157;
+    padding: 8px 12px;
+    font-weight: 600;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-right: 10px;
+}
+
+.actions .delete-btn {
+    background-color: red;
+    width: 90px;
+    color: #ffffff;
+    padding: 8px 12px;
+    font-weight: 600;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+
+.actions button:hover {
+    opacity: 0.9;
+}
+
+/* Dropdown for Sidebar */
+.dropdown {
+    position: relative;
+    background-color: #133157;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    color: white;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: relative;
+    background-color: #133157;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.dropdown-menu a li {
+    padding: 15px;
+    background-color: #133157;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.dropdown-menu a li:hover {
+    background-color: #2a5085;
+}
+
+/* Optional: Indent submenu items */
+.dropdown-menu a li {
+    padding-left: 30px;
+}

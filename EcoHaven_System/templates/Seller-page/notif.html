@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../static/thumbnail/seller-page/notif.css">
+    <script src="/static/js-seller/Seller.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img class="logo" src="../../static/thumbnail/logo.png.png" alt="">
+        </div>
+        <div class="profile-container" >
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture" id="sellerinformation"> 
+            <span id="user-name" >{{ username }}</span>
+            <a href=" /notification "><i class="fas fa-bell"></i></a>
+         </div>  
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/seller_dashboard"><li  >Dashboard</li></a>
+                <a href="/seller-page/products"><li    >Products</li></a>
+                <a href="/seller/update-stock"><li > Stocks</li> </a>
+                <a href="/seller/sales"><li  >Sales</li></a>
+                <a href="/seller/orders"><li  >Orders</li></a>
+            </ul>
+        </nav>
+        <a class="chatbtn" href=" /chat-seller "><i class="fas fa-comments"></i> Chat</a>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="notification-container">
+                <div class="notif-header"> 
+                    <div class="notif-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                     <h2>Notifications</h2>
+                </div>
+               
+                <div class="notif-list">    
+                {% for pending in pendings %}
+                    <div class="report-item">
+                        <p><strong>Pending Product</strong> </p>
+                        <p><strong>Order By:</strong> {{ pending['Fname'] }}</p>
+                        <p><strong>Product Name:</strong> {{ pending['Product_Name'] }}</p>
+                        
+                    </div>
+                {% else %}
+                    <p></p>
+                {% endfor %}
+                {% for report in reports %}
+                    <div class="report-item">
+                        <p><strong>Reported By:</strong> {{ report['Fname'] }}</p>
+                        <p><strong>Report Details:</strong> {{ report['violation_type'] }}</p>
+                    </div>
+                {% else %}
+                    <p></p>
+                {% endfor %}
+                {% for cancell in cancelled %}
+                    <div class="report-item">
+                        <p><strong>Canceled Product</strong> </p>
+                        <p><strong>Cancelled By:</strong> {{ cancell['Fname'] }}</p>
+                        <p><strong>Product Name:</strong> {{ cancell['Product_Name'] }}</p>
+                        <p><strong>Reasons:</strong> {{ cancell['cancel_reason'] }}</p>
+                    </div>
+                {% else %}
+                    <p></p>
+                {% endfor %}
+
+                    
+                    
+    
+                   
+                   
+                    <!-- Additional notifications can be added similarly -->
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

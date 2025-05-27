@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../static/thumbnail/seller-page/report-message.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img class="logo" src="../../static/thumbnail/logo.png.png" alt="">
+        </div>
+
+        <div class="profile-container" id="sellerinformation">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture"> 
+            <span id="user-name">{{ username }}</span>
+            <a href=" /seller-notification  "><i class="fas fa-bell"></i></a>
+         </div>     
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/seller_dashboard"><li   >Dashboard</li></a>
+                <a href="/seller-page/products"><li     >Products</li></a>
+                <a href="/seller/update-stock"><li > Stocks</li> </a>
+                <a href="/seller/sales"><li  >Sales</li></a>
+                <a href="/seller/orders"><li  class="active">Orders</li></a> 
+            </ul>
+        </nav>
+        <a class="chatbtn" href=" /chat-seller "><i class="fas fa-comments"></i> Chat</a>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <a class="back" href="/seller/report/{{buyer_id}}"><i class="fa-solid fa-arrow-left"></i> Back</a>
+            
+            <form action="{{ url_for('seller_report_message_form') }}" method="POST" enctype="multipart/form-data" class="report-form"  onsubmit="return confirmStatusChange();">
+                <h2 class="label">Report a Violation</h2> 
+                <input type="hidden" name="buyer_id" value="{{buyer_id}}">
+                <!-- Select Violation Type -->
+                <div class="violation-type">
+                    <label for="violation-select">Choose a report type:</label>
+                    <select id="violation-select" name="violation-type" required>
+                        <option value="" disabled selected>Select report type</option>
+                        <option value="product-issue">Product Issue (e.g., damaged or incorrect item)</option>
+                        <option value="payment-issue">Payment Issue (e.g., unauthorized charge, failed refund)</option>
+                        <option value="shipping-issue">Shipping Issue (e.g., delayed or lost shipment)</option>
+                        <option value="inappropriate-behavior">Inappropriate Behavior (e.g., abusive language, harassment)</option>
+                        <option value="fraudulent-activity">Fraudulent Activity (e.g., fake products, scam)</option>
+                        <option value="policy-violation">Policy Violation (e.g., prohibited items, misleading info)</option>
+                    </select>
+                </div>
+                
+                <!-- Detailed Report Form -->
+                <div class="details-form">
+                    <h3 class="label">Provide Details</h3>
+            
+                    <div class="message-content">
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description" rows="6" placeholder="Provide additional details..." required></textarea>
+                    </div>
+                    
+                    <div class="image-upload">
+                        <label for="proof-image">Attach image:</label>
+                        <input type="file" id="proof-image" name="proof-image" accept="image/*">
+                    </div>
+                    
+                    <button type="submit" class="send-button"><i class="fa-solid fa-paper-plane"></i> Submit Report</button>
+                </div>
+            </form>
+            
+        </main>
+    </div>
+</body>
+<script>
+    function confirmStatusChange() {
+     return confirm("Are you sure you want to block?");
+ }
+</script>
+</html>

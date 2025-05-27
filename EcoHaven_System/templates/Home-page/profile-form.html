@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/thumbnail/Homepage/profile-form.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script src="/static/js-buyer/buyer.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container" id="dashboard">
+            <a href="/buyer_dashboard"><img class="logo" src="../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+        
+        <form action="{{ url_for('search') }}" method="get" class="search-container">
+            <input class="search-bar" type="text" name="search" placeholder="Search">
+            <button class="search-btn" type="submit">
+                <img src="../../static/thumbnail/search.svg" alt="Search">
+            </button>
+        </form>
+
+        <div class="icon-container">
+            <div class="cart-icon" id="cart-link">
+               <img src="../../static/thumbnail/cart.svg" alt="">
+            </div>
+            <div class="order-icon" id="order-link" >
+                <img src="../../static/thumbnail/order-history.svg" alt="">
+             </div> 
+        </div>
+        <div class="profile-container">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture" onclick="window.location.href='/buyer_dashboard/buyer_profile';"> 
+            <span id="user-name">{{ username }}</span>
+          
+            <a href="/notification"><i class="fas fa-bell"></i></a>
+        </div>
+    </div>
+    
+    <div class="form-main-container">
+        <div class="form-container" action="">
+            <a class="back" href="/buyer_dashboard/buyer_profile"><i class="fa-solid fa-arrow-left"></i> Back</a>
+            <form action="{{ url_for('update_profile_image') }}" method="POST" class="profile-form" enctype="multipart/form-data">
+                <h4>Upload Photo</h4>
+                <div class="inputField">
+                    <label for="image">Upload Profile Image:</label><br>
+                    <input type="file" name="image" required><br>                                           
+                </div>
+                <button type="submit" class="update-btn">UPDATE</button>
+            </form>
+
+            <form action="{{ url_for('update_account_info') }}" method="POST" class="login-form">
+                <h4>Account Information</h4>
+                <div class="inputField">
+                    <label for="email">Email:</label><br>
+                    <input type="email" placeholder="Enter Email Address" name="email" value="{{ email }}" required><br>
+            
+                    <label for="password">New Password:</label><br>
+                    <input type="password" placeholder="Enter New Password" name="password" ><br>
+                </div>
+            
+                <button type="submit" class="update-btn">UPDATE</button>
+            </form>
+            
+            <form action="{{ url_for('update_account_personal_info') }}" method="POST" class="personal-form">
+                <h4>Account Information</h4>
+                <div class="container">
+                    <div class="inputField2">
+                        <label for="fname">First Name</label><br>
+                        <input type="text" name="fname" value="{{ Fname }}"><br>
+                    </div>
+                    <div class="inputField2">
+                        <label for="Lname">Last Name</label><br>
+                        <input type="text" name="lname" value="{{ Lname }}"><br>
+                    </div>
+                </div>
+            
+                <div class="container">
+                    <div class="inputField2">
+                        <label for="Mname">Middle Name</label><br>
+                        <input type="text" name="mname" value="{{ Mname }}"><br>
+                    </div>
+                </div>
+            
+                <div class="container">
+                    <div class="inputField2">
+                        <label for="number">Mobile Number</label><br>
+                        <input type="text" name="number" value="{{ contact_num }}"><br>
+                    </div>
+            
+                    <div class="inputField2">
+                        <label for="gender">Gender</label><br>
+                        <select name="gender" id="gender">
+                            <option value="" disabled selected>Select Gender</option>
+                            <option value="Male" {% if gender == 'Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if gender == 'Female' %}selected{% endif %}>Female</option>
+                            <option value="Other" {% if gender == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                </div>
+            
+                <button type="submit" class="update-btn">UPDATE</button>
+            </form>
+            
+
+    
+
+            
+            <form action="{{ url_for('update_address_buyer') }}" method="POST" class="address-form">
+                <h4>Address</h4>
+                <div class="container">
+                    <div class="inputField2">
+                        <label for="houseNo">House Number:</label><br>
+                        <input type="text" name="houseNo" value="{{ houseNo }}" required>
+                    </div>
+            
+                    <div class="inputField2">
+                        <label for="street">Street:</label><br>
+                        <input type="text" name="street" value="{{ street }}" required>
+                    </div>
+                </div>
+            
+                <div class="container">
+                    <div class="inputField2">
+                        <label for="barangay">Barangay:</label><br>
+                        <input type="text" name="barangay" value="{{ barangay }}" required>
+                    </div>
+                    
+                    <div class="inputField2">
+                        <label for="city">City/Municipality:</label><br>
+                        <input type="text" name="city" value="{{ city }}" required>
+                    </div>            
+                </div>
+            
+                <div class="container">
+                    <div class="inputField2">
+                        <label for="Province">Province:</label><br>
+                        <input type="text" name="Province" value="{{ Province }}" required>
+                    </div>
+            
+                    <div class="inputField2">
+                        <label for="postal">Postal Code:</label><br>
+                        <input type="text" name="postal" value="{{ postal_code }}" required>
+                    </div>
+                </div>
+            
+                <button type="submit" class="update-btn">UPDATE</button>
+            </form>
+            
+        </div>
+    </div>
+    
+
+
+    
+
+
+    
+    <footer class="footer-container">
+        <div class="footer-logo">
+            <img src="../../static/thumbnail/logo.png.png" alt="EcoHAven-Logo">
+        </div>
+
+        <div class="info-container">
+            <div class="devteam-container">
+                <ul>
+                    <li>EcoHaven-IT Development Team</li>
+                    <li>Elca, Eirich M. </li>
+                    <li>Oliveros, Roldan A.</li>
+                    <li>Villodo, Nina Clarisse R.</li>
+                    <li> Javier, Jonamie C.</li>
+                </ul>
+            </div>
+            <div class="social-container">
+                <ul>
+                    <li>Contact Us</li>
+                    <li><a href="#"> <i class="fab fa-facebook"></i> EcoHaven_Official</a></li>
+                    <li><a href="#"> <i class="fab fa-instagram"></i> @EcoHaven</a></li>
+                    <li><a href="#"> <i class="fas fa-envelope"></i> EcoHaven@gmai.com</a></li>
+                    <li><a href="#"> <i class="fab fa-tiktok"></i> EcoHaven_ph</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copy-right">
+            <p class="copy-right-text">© 2024 EcoHaven. All Rights Reserved .</p>
+        </div>
+        
+    </footer>
+       
+</body>
+</html>

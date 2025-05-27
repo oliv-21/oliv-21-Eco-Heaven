@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../../static/thumbnail/Admin-page/account-management/reject-notif.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="/static/js-buyer/error-message.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <a href="/admin_dashboard"><img class="logo" src="../../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+
+        <div class="profile-container">
+            <img class="profile-img" src="../../../static/thumbnail/eirich2.jpg" alt="">
+            <span id="user-name">Admin</span>
+        </div>       
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/admin_dashboard"><li>Dashboard</li></a>
+                <li class="dropdown">
+                    Account Management
+                    <ul class="dropdown-menu">
+                        <a href=""><li class="active">Seller Account </li></a>
+                        <a href="/account-management/requestAcc-rider"><li>Rider Account </li></a>
+                    </ul>
+                </li>       
+                <a href="/admin_dashboard/blocked-list"><li>Blocked List</li></a>
+                <a href="/admin_dashboard/report"><li>Report</li></a>
+                <a href="/admin_sales"><li>Sales </li></a>
+                <a href="/logout" onclick="return confirm('Are you sure you want to logout?')" ><li class="logout">Logout</li></a>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <a class="back" href="/admin_dashboard/account-management"><i class="fa-solid fa-arrow-left"></i> Back</a>
+            
+            <div class="message-form">
+                <h2>Blocking Reasons</h2>
+                
+                <div class="message-content">
+                    <form action="{{ url_for('block_user', user_id=user_id) }}" method="POST" onsubmit="return confirmStatusChange();">
+                        <select id="blockReason"  name="block_reason" required>
+                            <option value="" disabled selected>Select a reason</option>
+                            <option value="Spam Activities">Spam Activities</option>
+                            <option value="Inappropriate Content">Inappropriate Content</option>
+                            <option value="Fraudulent Activities">Fraudulent Activities</option>
+                            <option value="Account Hacking or Compromise">Account Hacking or Compromise</option>
+                            <option value="Violation of Terms">Violation of Terms</option>
+                            <option value="Payment Issues">Payment Issues</option>
+                            <option value="Customer Complaints">Customer Complaints</option>
+                            <option value="Fake Reviews">Fake Reviews</option>
+                            <option value="Duplicate Accounts">Duplicate Accounts</option>
+                            <option value="Inactive Account">Inactive Account</option>
+                        </select>
+                    
+                    
+                        <button type="submit" class="send-button"><i class="fa-solid fa-paper-plane"></i> Send</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+<script>
+    function confirmStatusChange() {
+     return confirm("Are you sure you want to block?");
+ }
+</script>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../static/thumbnail/Admin-page/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <a href="../seller-page/dashboard.html"><img class="logo" src="../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+
+        <div class="profile-container">
+            <img class="profile-img" src="../../static/thumbnail/eirich2.jpg" alt="">
+            <span id="user-name">Admin</span>
+        </div>       
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <li class="active">Dashboard</li>
+
+                <li class="dropdown">
+                    Account Management
+                    <ul class="dropdown-menu">
+                        <a href="/admin_dashboard/account-management"><li>Seller Account </li></a>
+                        <a href="/account-management/requestAcc-rider"><li>Rider Account </li></a>
+                    </ul>
+                </li>
+
+                <a href="/admin_dashboard/blocked-list"><li>Blocked List</li></a>
+                <a href="/admin_dashboard/report"><li>Report</li></a>
+                <a href="/admin_sales"><li>Sales</li></a>
+                <a href="/logout" onclick="return confirm('Are you sure you want to logout?')"><li class="logout">Logout</li></a>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <button class="banner-btn" onclick="openModal()"> 
+                <i class="fas fa-cogs"></i>Change Promotional Banner
+            </button>
+            
+            <!-- Modal -->
+            <div id="bannerModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2>Update Promotional Banner</h2>
+                    <form action="/upload-banner" method="POST" enctype="multipart/form-data">
+                        <label for="bannerFile">Choose a new banner:</label>
+                        <input type="file" id="bannerFile" name="bannerFile" accept="image/*" required>
+                        <button type="submit" class="upload-btn">Upload</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="cards">
+                <a class="card card-yellow" href="/admin_sales">
+                    <div>
+                        <h3>Total Commission</h3>
+                        <p>&#8369; {{ total_commission }}</p>
+                    </div>
+                </a>
+
+                <a class="card card-blue" href="/admin_dashboard/account-management">
+                    <div>
+                        <h3>Total Registered Seller</h3>
+                        <p>{{ sellersregister }}</p>
+                    </div>
+                </a>
+
+                <a class="card card-blue" href="/account-management/registered-buyer">
+                    <div>
+                        <h3>Total Registered Buyer</h3>
+                        <p>{{ buyersregister }}</p>
+                    </div>
+                </a>
+            </div>
+        </main>
+    </div>
+
+<script>
+    function confirmLogout() {
+        const confirmation = confirm("Are you sure you want to logout?");
+        if (confirmation) {
+            window.location.href = "{{ url_for('logout') }}"; 
+        }
+    }
+
+    function openModal() {
+        const modal = document.getElementById('bannerModal');
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('bannerModal');
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('bannerModal');
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+</script>
+</body>
+</html>

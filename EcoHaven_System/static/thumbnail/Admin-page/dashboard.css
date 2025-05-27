@@ -1,0 +1,262 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: roboto, Arial, Helvetica, sans-serif;
+}
+.header{
+    background-color: #ADC8EE;
+    display: flex;
+    justify-content: space-between;
+    height: 55px;
+}
+
+.logo-container{
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+}
+
+.logo{
+    width: 180px; 
+    padding-top: 10px;
+}
+
+.profile-img{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: conver;
+    margin: 0px 15px 0px 20px;
+}
+.profile-container {
+    display: flex;
+    align-items: center;
+    width: 200px ;
+    margin: 2px;
+    padding: 5px;
+    border-radius: 5px;
+}
+#user-name {
+    font-size: 16px;
+    font-weight: 500;
+    margin-right: 5px;
+    color: #133157
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 20%;
+    background-color: #ADC8EE;
+    color: white;
+    padding: 40px 20px 0px 20px;
+}
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li{
+    padding: 20px;
+    cursor: pointer;
+    background-color: #133157;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: left;
+    transition: 0.2s;
+}
+a{
+    text-decoration: none;
+    color:#ffffff;
+}
+
+.sidebar ul li.active{
+    background-color:#FAB51C;
+    color: #133157;
+    font-weight: 600;
+}
+
+.sidebar ul li:hover{
+    opacity: 0.8;
+}
+
+.banner-btn{
+    font-size: 16px;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    border: none;
+    border: 2px solid #133157;
+    cursor: pointer;;
+    
+    i{
+        margin-right: 10px;
+        color: #133157;
+    }
+}
+
+/* Main Content */
+.main-content {
+    width: 80%;
+    background-color: #F0F4FA;
+    padding: 20px;
+}
+
+
+/* Cards Section */
+.cards {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+}
+
+.card {
+    width: 20%;
+    height: 120px;
+    padding: 20px;
+    text-align: center;
+    color: white;
+    font-size: 16px;
+    padding-top: 50px;
+}
+
+.card-blue {
+    background-color: #133157;
+    
+}
+
+.card-yellow {
+    background-color: #133157;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.card p {
+    font-size: 36px;
+}
+
+/* Modal Container */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark transparent background */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: white;
+    width: 400px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    animation: fadeIn 0.3s;
+    position: relative;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Close Button */
+.close {
+    position: absolute;
+    top: 0px;
+    right: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #133157;
+    cursor: pointer;
+}
+
+/* Form Styling */
+form label {
+    font-size: 16px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+form input[type="file"] {
+    margin: 10px 0;
+}
+
+.upload-btn {
+    background-color: #FAB51C;
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.upload-btn:hover {
+    background-color: #e09e1b;
+}
+
+/* Dropdown for Sidebar */
+.dropdown {
+    position: relative;
+    background-color: #133157;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    color: white;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: relative;
+    background-color: #133157;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+.dropdown-menu a li {
+    padding: 15px;
+    background-color: #133157;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.dropdown-menu a li:hover {
+    background-color: #2a5085;
+}
+
+/* Optional: Indent submenu items */
+.dropdown-menu a li {
+    padding-left: 30px;
+}

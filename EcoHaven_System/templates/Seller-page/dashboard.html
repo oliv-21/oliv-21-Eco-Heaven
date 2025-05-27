@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../static/thumbnail/seller-page/dashboard.css">
+    <script src="/static/js-seller/Seller.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img class="logo" src="../../static/thumbnail/logo.png.png" alt="">
+        </div>
+        <div class="profile-container" >
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture" id="sellerinformation"> 
+            <span id="user-name" >{{ username }}</span>
+            <a href="/seller-notification "><i class="fas fa-bell"></i></a>
+         </div>  
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/seller_dashboard"><li class="active"  >Dashboard</li></a>
+                <a href="/seller-page/products"><li    >Products</li></a>
+                <a href="/seller/update-stock"><li > Stocks</li> </a>
+                <a href="/seller/sales"><li  >Sales</li></a>
+                <a href="/seller/orders"><li  >Orders</li></a>
+            </ul>
+        </nav>
+        <a class="chatbtn" href=" /chat-seller "><i class="fas fa-comments"></i> Chat</a>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="cards">
+                <div class="card card-blue" >
+                    <h3>Total Orders</h3>
+                    <p>{{ order_count}}</p>
+                </div>
+                <div class="card card-yellow">
+                    <h3>Total Sales</h3>
+                    <p>&#8369; {{ sales }}</p>
+                </div>
+                
+            </div>
+
+            <div class="best-product-container">
+                
+                <h2>Top Selling Products <i class="fas fa-fire"></i></h2>
+                {% for top_product in top_products %}
+                <div class="product-container">
+                    <div class="column1"> <i class="fas fa-fire"></i> </div> 
+
+                    <div class="column2"> <img class="item-img" src="{{ url_for('static', filename='uploads/' + top_product.Image) }}" alt=""> </div>
+
+                    <div  class="column3"> {{ top_product.product_name }} </div>
+
+                    <div  class="column4"> {{top_product. total_sold }}  sold</div>
+                </div>
+                {% endfor %}
+
+                
+            </div>
+        </main>
+    </div>
+</body>
+</html>

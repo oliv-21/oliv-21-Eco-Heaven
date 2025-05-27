@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/thumbnail/Homepage/message-report.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script src="/static/js-buyer/buyer.js"></script>
+
+    <title>Homepage</title>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-container" id="dashboard">
+            <a href="/buyer_dashboard"><img class="logo" src="../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+        
+        <form action="{{ url_for('search') }}" method="get" class="search-container">
+            <input class="search-bar" type="text" name="search" placeholder="Search">
+            <button class="search-btn" type="submit">
+                <img src="../../static/thumbnail/search.svg" alt="Search">
+            </button>
+        </form>
+
+        <div class="icon-container">
+            <div class="cart-icon" id="cart-link">
+               <img src="../../static/thumbnail/cart.svg" alt="">
+            </div>
+            <div class="order-icon" id="order-link" >
+                <img src="../../static/thumbnail/order-history.svg" alt="">
+             </div> 
+        </div>
+        <div class="profile-container">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture" onclick="window.location.href='/buyer_dashboard/buyer_profile';"> 
+            <span id="user-name">{{ username }}</span>
+          
+            <a href="/notification"><i class="fas fa-bell"></i></a>
+        </div>
+    </div>
+    <a class="chatbtn" href="/chat"><i class="fas fa-comments"></i> Chat</a>
+
+    <main class="main-container">
+        <!-- /buyer_dashboard/seller-profile/{{ seller_id }} -->
+        <a class="back" href="{{ url_for('buyersellerprofile', seller_id=seller_id) }}">
+            <i class="fa-solid fa-arrow-left"></i> Back
+        </a>
+        
+        <form action="{{ url_for('buyersellerprofilereport_form', seller_id=seller_id) }}" method="POST" enctype="multipart/form-data">
+            <div class="report-form">
+                <h2 class="label">Report a Violation</h2>
+                
+                <!-- Select Violation Type -->
+                <div class="violation-type">
+                    <label for="violation-select">Choose a report type:</label>
+                    <select id="violation-select" name="violation-type">
+                        <option value="" disabled selected>Select report type</option>
+                        <option value="product-issue">Product Issue (e.g., damaged or incorrect item)</option>
+                        <option value="payment-issue">Payment Issue (e.g., unauthorized charge, failed refund)</option>
+                        <option value="shipping-issue">Shipping Issue (e.g., delayed or lost shipment)</option>
+                        <option value="inappropriate-behavior">Inappropriate Behavior (e.g., abusive language, harassment)</option>
+                        <option value="fraudulent-activity">Fraudulent Activity (e.g., fake products, scam)</option>
+                        <option value="policy-violation">Policy Violation (e.g., prohibited items, misleading info)</option>
+                    </select>
+                </div>
+                
+                
+                <!-- Detailed Report Form -->
+                <div class="details-form">
+                    <h3 class="label">Provide Details</h3>
+                
+                    <div class="message-content">
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description" rows="6" placeholder="Provide additional details..."></textarea>
+                    </div>
+                    
+                    <div class="image-upload">
+                        <label for="proof-image">Attach image:</label>
+                        <input type="file" id="proof-image" name="proof-image" accept="image/*" required>
+                    </div>
+                    
+                    <button type="submit" onclick="return confirm('Are you sure you want to report this seller?')" class="send-button"><i class="fa-solid fa-paper-plane"></i> Submit Report</button>
+                </div>
+            </div>
+        </form>
+    </main>
+    
+
+
+
+    
+    <footer class="footer-container">
+        <div class="footer-logo">
+            <img src="../../static/thumbnail/logo.png.png" alt="EcoHAven-Logo">
+        </div>
+
+        <div class="info-container">
+            <div class="devteam-container">
+                <ul>
+                    <li>EcoHaven-IT Development Team</li>
+                    <li>Elca, Eirich M. </li>
+                    <li>Oliveros, Roldan A.</li>
+                    <li>Villodo, Nina Clarisse R.</li>
+                    <li> Javier, Jonamie C.</li>
+                </ul>
+            </div>
+            <div class="social-container">
+                <ul>
+                    <li>Contact Us</li>
+                    <li><a href="#"> <i class="fab fa-facebook"></i> EcoHaven_Official</a></li>
+                    <li><a href="#"> <i class="fab fa-instagram"></i> @EcoHaven</a></li>
+                    <li><a href="#"> <i class="fas fa-envelope"></i> EcoHaven@gmai.com</a></li>
+                    <li><a href="#"> <i class="fab fa-tiktok"></i> EcoHaven_ph</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copy-right">
+            <p>© 2024 EcoHaven. All Rights Reserved .</p>
+        </div>
+        
+    </footer>
+       
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../static/thumbnail/seller-page/update-form-product.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <a href="../seller-page/dashboard.html"><img class="logo" src="../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+        <div class="profile-container" id="sellerinformation">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture"> 
+            <span id="user-name">{{ username }}</span>
+            <a href=" /seller-notification  "><i class="fas fa-bell"></i></a>
+         </div>  
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/seller_dashboard"><li  >Dashboard</li></a>
+                <a href="/seller-page/products"><li class="active"   >Products</li></a>
+                <a href="/seller/update-stock"><li > Stocks</li> </a>
+                <a href="/seller/sales"><li  >Sales</li></a>
+                <a href="/seller/orders"><li  >Orders</li></a>
+            </ul>
+        </nav>
+        <a class="chatbtn" href=" /chat-seller "><i class="fas fa-comments"></i> Chat</a>
+
+        <!-- Main Content -->   
+        <main class="main-content">
+            <div class="form-container">
+                <form action="{{ url_for('sellerpage_products_item_update_product_image') }}" enctype="multipart/form-data" method="POST">
+                    <a class="back" onclick="window.location.href='/seller-page-item/products/{{ product_id }}';"  ><i class="fa-solid fa-arrow-left"></i> Back</a>
+                    <input type="hidden" name="product_id" value="{{ product_id }}">
+                    <div class="inputField1">
+                        <div  class="inputImg">
+                            <label for="image">Upload Image:</label>
+                            <input type="file" name="image" required>
+                        </div>
+    
+                        <div>
+                            <button type="submit" class="image-btn">Upload Image</button>
+                        </div>         
+                    </div>
+                </form>
+                <form action="{{ url_for('sellerpage_products_item_update_product_detais') }}"method="POST">
+                    <input type="hidden" name="product_id" value="{{ product_id }}">
+                    <div class="inputField">
+                        <label for="product-name">Product Name:</label>
+                        <input type="text" placeholder="Enter Product Name" name="product-name" value=" {{ productName }}">
+                    </div>
+                    
+                    <div class="inputField">
+                        <label for="price">Price:</label>
+                        <input type="text" placeholder="Enter Price" name="price" value="{{price}}" required>
+                    </div>
+                    
+                    <div class="inputField">
+                        <label for="description">Product Description:</label>
+                        <textarea id="description" name="description" rows="4" cols="50" placeholder="Enter product description here..." required>{{ description }}</textarea>
+                    </div>
+                    
+    
+                    <div class="inputField">
+                        <label for="category">Category:</label>
+                        <select id="category" name="category"  required>
+                            <option value="">-- Select Category --</option>
+                            <option value="Gardening Tools">Gardening Tools</option>
+                            <option value="Outdoor Living">Outdoor Living</option>
+                            <option value="Home Tools">Home Tools</option>
+                            <option value="Kitchen Appliances">Kitchen Appliances</option>
+                            <option value="Furniture">Furniture</option>
+                            <option value="Decor">Decor</option>
+                            <option value="Bedding">Bedding</option>
+                            <option value="Bath">Bath</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+                     
+                    <!-- <div class="create-variation-btn">Variation</div>
+                    <div id="variations-main-container">
+                        
+                        <div class="variation-section">
+                            <div class="inputField">
+                                <label for="variation-type">Select Variation Type:</label>
+                                <select class="variation-type" onchange="showVariationInput(this)">
+                                    <option value="">-- Select Variation Type --</option>
+                                    <option value="color">Color</option>
+                                    <option value="size">Size</option>
+                                </select>
+                            </div>
+                        
+                            <div class="variations-container"></div>
+                            <button type="button" class="add-variation-btn" onclick="addVariation(this)">+ Update Variation Value</button>
+                        </div>
+                    </div>
+                    <div id="variations-main-container">
+                        <div class="variation-section">
+                            <div class="inputField">
+                                <label for="variation-type">Select Variation Type:</label>
+                                <select class="variation-type" onchange="showVariationInput(this)">
+                                    <option value="">-- Select Variation Type --</option>
+                                    <option value="color">Color</option>
+                                    <option value="size">Size</option>
+                                </select>
+                            </div>
+                     
+                            <div class="variations-container"></div>
+                            <button type="button" class="add-variation-btn" onclick="addVariation(this)">+ Update Variation Value</button>
+                        </div>
+                    </div>-->
+                    
+                    <button class="submit-btn" type="submit"> Update</button> 
+                </form> 
+            </div>
+            
+                      
+        </main>
+    </div>  
+
+    <!-- <script>
+        function showVariationInput(selectElement) {
+            const variationSection = selectElement.closest('.variation-section'); // Get the corresponding variation section
+            const variationsContainer = variationSection.querySelector('.variations-container');
+
+            // Clear existing variations
+            variationsContainer.innerHTML = '';
+
+            const variationType = selectElement.value;
+            if (variationType === 'color') {
+                variationSection.querySelector('.variation-title').textContent = 'Color Variations';
+            } else if (variationType === 'size') {
+                variationSection.querySelector('.variation-title').textContent = 'Size Variations';
+            } else {
+                return; // Exit if no type is selected
+            }
+        }
+    
+        function addVariation(buttonElement) {
+            const variationsContainer = buttonElement.previousElementSibling; // Get the variations container
+    
+            const variationInputDiv = document.createElement('div');
+            variationInputDiv.className = 'variation-option';
+    
+            const variationInput = document.createElement('input');
+            variationInput.type = 'text';
+            variationInput.placeholder = 'Enter variation value (e.g., blue)';
+    
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.textContent = 'Remove';
+            removeButton.className = 'remove-variation-btn';
+    
+            removeButton.addEventListener('click', function() {
+                variationsContainer.removeChild(variationInputDiv);
+            });
+    
+            variationInputDiv.appendChild(variationInput);
+            variationInputDiv.appendChild(removeButton);
+            variationsContainer.appendChild(variationInputDiv);
+        }
+    
+        function createNewVariationSection() {
+            const originalSection = document.querySelector('.variation-section'); // Select the first variation section
+            const newVariationSection = originalSection.cloneNode(true); // Clone the section
+
+            // Reset values
+            newVariationSection.querySelector('.variation-type').selectedIndex = 0; // Reset the selection
+            newVariationSection.querySelector('.variations-container').innerHTML = ''; // Clear any previous variations
+
+            // Append the new section to the main container
+            document.getElementById('variations-main-container').appendChild(newVariationSection);
+        }
+    </script> -->
+</body>
+</html>

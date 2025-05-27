@@ -1,0 +1,187 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../../static/thumbnail/Homepage/place-order.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&display=swap" rel="stylesheet">
+        <script src="/static/js-buyer/buyer.js"></script>
+        <script src="/static/js-login/error-message.js"></script>
+        <title>Place Order</title>
+    </head>
+    <body>
+        <div class="header">
+            <div class="logo-container" id="dashboard">
+                <a href="/buyer_dashboard"><img class="logo" src="../../static/thumbnail/logo.png.png" alt=""></a>
+            </div>
+            
+            <form action="{{ url_for('search') }}" method="get" class="search-container">
+                <input class="search-bar" type="text" name="search" placeholder="Search">
+                <button class="search-btn" type="submit">
+                    <img src="../../static/thumbnail/search.svg" alt="Search">
+                </button>
+            </form>
+    
+            <div class="icon-container">
+                <div class="cart-icon" id="cart-link">
+                   <img src="../../static/thumbnail/cart.svg" alt="">
+                </div>
+                <div class="order-icon" id="order-link" >
+                    <img src="../../static/thumbnail/order-history.svg" alt="">
+                 </div> 
+            </div>
+            <div class="profile-container">
+                <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture" onclick="window.location.href='/buyer_dashboard/buyer_profile';"> 
+                <span id="user-name">{{ username }}</span>
+              
+                <a href="/notification"><i class="fas fa-bell"></i></a>
+            </div>
+        </div>
+        <a class="chatbtn" href="/chat"><i class="fas fa-comments"></i> Chat</a>
+
+        <div class="main-container">
+            <div class="address-container">                 
+                <div class="address-header" >
+                    <h3 > <i class="fa-solid fa-location-dot"></i> Delivery Address</h3>
+                </div>
+
+                <div class="address-info">
+                    <span id="user-name"> {{ fullname }} </span><br>
+                    <span id="contact"> {{location }}</span>
+                </div>
+            </div>   
+
+            <div class="product-ordered-header">
+                <div class="product">
+                    <p class="header-labels">Products Ordered</p>
+                </div>
+    
+                <div class="labels">
+                    <p class="header-labels">Unit Price</p>
+                </div>
+    
+                <div class="labels">
+                    <p class="header-labels">Quantity</p>
+                </div>
+    
+                <div class="labels">
+                    <p class="header-labels">Item Subtotal</p>
+                </div>
+            </div>
+        
+        <form action="{{ url_for('checkoutPost') }}" method="POST">
+            <div class="product-ordered-container"></div>
+                {% if cart_items %}
+                    {% for item in cart_items %}
+                        <div class="product-ordered-container">
+                    
+                            <div class="product">
+                                <input type="hidden" name="cart_ids[]" value="{{ item['id'] }}">  
+                                <img class="product-img" src="{{ url_for('static', filename='uploads/' + item.Image) }}" alt="{{ item.Product_Name }}">
+                                <div>
+                                    <span class="product-name">{{ item.product_name }}</span>
+                                        <!-- <p class="variation">Variation: <span id="">{{ item.color }}</span> | <span id="">{{ item.size }}</span></p> -->
+                                </div>
+                            </div>
+                            <div class="labels">
+                                <span class="unit-price">₱{{ item.Price }}</span>
+                            </div>
+                            <div class="labels">
+                                <span id="Quantity">{{ item.quantity }}</span>
+                            </div>
+                            <div class="labels">
+                                <span class="total-price">₱{{ item.total_price }}</span>
+                            </div>
+                        
+                        </div>
+                    {% endfor %}
+                {% else %}
+                        <p>Your cart is empty.</p>
+                {% endif %}
+            
+
+            <div class="payment-container">                 
+                <div class="payment-method" >
+                    <h3 ><i class="fa-solid fa-credit-card"></i>  Payment Method:</h3>
+                </div>
+
+                <div class="payment-list">
+                    <div>
+                        <p>Cash on Delivery</p>
+                    </div>
+                    <div class="change-link">
+                        <p>Change</p>
+                    </div>
+                    
+                </div>
+            </div> 
+
+            <div class="payment-container">                 
+                <div class="payment-method" >
+                    <h3 ><i class="fa fa-shipping-fast"></i>  Shipping Option:</h3>
+                </div>
+
+                <div class="payment-list">
+                    <div>
+                        <p>Standard Local</p>
+                    </div>
+                    <div class="change-link">
+                        <p>₱35.00</p>
+                    </div>
+                    
+                </div>
+            </div>  
+
+            <div class="total-payment-container">
+                <div class="total-payment">
+                    <h4>TOTAL PAYMENT:  <span id="totalPayment">₱{{ total_price }}</span></h4>
+                </div>
+                
+                <div>
+                    <input type="hidden" name="product_id" value="{{ product_id }}">
+                    <input type="hidden" name="variation_id" value="{{ variation_id }}">
+                    <input type="hidden" name="buying" value="{{ buying }}">
+                    <input type="hidden" name="quantity" value="{{ quantity }}">
+                    <button  type="submit" class="place-order-btn" >Place Order</button>
+                </div>
+            </div>
+        </form>  
+        </div>
+
+        
+        
+        <footer class="footer-container">
+            <div class="footer-logo">
+                <img src="../../static/thumbnail/logo.png.png" alt="EcoHAven-Logo">
+            </div>
+
+            <div class="info-container">
+                <div class="devteam-container">
+                    <ul>
+                        <li>EcoHaven-IT Development Team</li>
+                        <li>Elca, Eirich M. </li>
+                        <li>Oliveros, Roldan A.</li>
+                        <li>Villodo, Nina Clarisse R.</li>
+                        <li> Javier, Jonamie C.</li>
+                    </ul>
+                </div>
+                <div class="social-container">
+                    <ul>
+                        <li>Contact Us</li>
+                        <li><a href="#"> <i class="fab fa-facebook"></i> EcoHaven_Official</a></li>
+                        <li><a href="#"> <i class="fab fa-instagram"></i> @EcoHaven</a></li>
+                        <li><a href="#"> <i class="fas fa-envelope"></i> EcoHaven@gmai.com</a></li>
+                        <li><a href="#"> <i class="fab fa-tiktok"></i> EcoHaven_ph</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="copy-right">
+                <p class="copy-right-text">© 2024 EcoHaven. All Rights Reserved .</p>
+            </div>
+        </footer>
+
+     
+    </body>
+    </html>

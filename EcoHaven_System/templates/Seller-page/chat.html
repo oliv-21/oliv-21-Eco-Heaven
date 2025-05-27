@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../static/thumbnail/seller-page/chat.css">
+    <script src="/static/js-seller/Seller.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img class="logo" src="../../static/thumbnail/logo.png.png" alt="">
+        </div>
+
+        <div class="profile-container" onclick="window.location.href='/seller/profile'">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture"> 
+            <span id="user-name">{{ username }}</span>
+            <a href=" /seller-notification  "><i class="fas fa-bell"></i></a>
+         </div>  
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/seller_dashboard"><li>Dashboard</li></a>
+                <a href="/seller-page/products"><li    >Products</li></a>
+                <a href="/seller/update-stock"><li > Stocks</li> </a>
+                <a href="/seller/sales"><li  >Sales</li></a>
+                <a href="/seller/orders"><li  >Orders</li></a>
+            </ul>
+        </nav>
+        <a class="chatbtn" href=" /chat-seller "><i class="fas fa-comments"></i> Chat</a>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="chat-container">
+                <div class="chat-sidebar">
+                    <div class="chat-search">
+                        <input type="text" placeholder="Search" />
+                    </div>
+                    <div class="chat-list">
+                        {% for chat in chats %}
+                            <div class="chat-item {% if chat.active %}active{% endif %}" onclick="window.location.href='/chat-seller/{{ chat.sender_id }}/{{ chat.receiver_id }}';">
+                                <img src="{{ url_for('static', filename='uploads/' + chat.profile_pic) }}"  alt="Store">
+                                <div class="chat-details">
+                                    <p class="chat-name">{{ chat.Fname }}</p>
+                                    <p class="chat-preview">{{ chat.last_message }}</p>
+                                    <span class="chat-time">{{ chat.last_message_time }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    
+                </div>
+                <div class="chat-box">
+                    <div class="chat-header">
+                        <p>{{ seller.Fname }}</p> 
+                    </div>
+                    <div class="chat-messages">
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message.sender_id == sender_id %}
+                                    <!-- Message sent by the logged-in user -->
+                                    <div class="chat-message sent">
+                                        <p>{{ message.message }}</p>
+                                        <span>{{ message.timestamp }}</span>
+                                    </div>
+                                {% else %}
+                                    <!-- Message received from the other user -->
+                                    <div class="chat-message received">
+                                        <p>{{ message.message }}</p>
+                                        <span>{{ message.timestamp }}</span>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <div>No messages available.</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div >
+                        <form class="chat-input" method="POST" action="/chat-seller/{{ buyer_id }}/{{ seller_id }}">
+                            <textarea type="text" id="message" name="message" placeholder="Type your message..." required></textarea>
+                            <button type="submit" > Send</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,170 @@
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #E2E2E2;
+    font-family: roboto, Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.main-container{
+    position: relative; /*para mag overlay ung sub-container na nasa loob*/
+    width: 850px;
+    height: 660px;
+}
+
+.vertical-design{
+    width: 290px;
+    height: 650px;
+    background-color: #ADC8EE;
+    margin-left: 70px;
+}
+
+.sub-container {
+    position: absolute; /*para mag overlay*/
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust centering due to absolute positioning */
+    width: 850px;
+    height: 450px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sub-container2{
+    width: 730px;
+    height: 280px;
+    background-color:#ADC8EE;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.logo{
+    position: absolute;
+    width: 317px;
+    height: 90;
+    z-index: 1;
+    left: 75px;
+
+}
+
+h2{
+    color: #133156;
+}
+
+form{
+    position: absolute;
+    width: 350px;
+    height: 380px;
+    right: 75px;
+    background-color: #ffffff;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+    margin-top: 30px;
+    text-align: center;
+}
+
+.forgot-password{
+    font-size: 14px;
+    color: blue;
+    text-decoration: none;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+
+.proceed-btn{
+    width: 232px;
+    height: 32;
+    font-size: 18px;
+    color: #133156;
+    font-weight: 600;
+    background-color: #FBB51F;
+    border: none;
+    padding: 8px;
+    margin: 33px 0px 20px 0px;
+    cursor: pointer;
+}
+input[type="email"]{
+    width: 250px;
+    height: 35px;
+    padding: 0px 0px 0px 8px;
+    font-size: 16px;
+    margin: 15px 0px 30px 0px;
+}
+
+input[type="text"]{
+    width: 250px;
+    height: 35px;
+    padding: 0px 0px 0px 8px;
+    font-size: 16px;
+    margin: 15px 0px 30px 0px;
+}
+
+input[type="password"]{
+    width: 250px;
+    height: 35px;
+    padding: 0px 0px 0px 8px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.proceed-btn:hover{
+    opacity: 0.9;
+}
+
+.proceed-btn:active{
+    opacity: 0.5;
+}
+
+.back{
+    position: absolute;
+    left: 20px;
+    top: 22px;
+    width: 30px;
+    height: 26px;
+}
+.modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background-color: #133157;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    font-family: Arial, sans-serif;
+  }
+  
+  .modal-content {
+    padding: 20px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 16px;
+  }
+  
+  .modal-footer {
+    padding: 10px 20px;
+    text-align: center;
+    border-top: 1px solid #e0e0e0;
+  }
+  
+  .modal-footer button {
+    background-color:  #FAB51C; /* Dark blue color */
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .modal-footer button:hover {
+    background-color: #FAB51C; /* Slightly darker on hover */
+  } 

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/thumbnail/Homepage/profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script src="/static/js-buyer/buyer.js"></script>
+
+    <title>Profile</title>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container" id="dashboard">
+            <a href="/buyer_dashboard"><img class="logo" src="../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+        
+        <form action="{{ url_for('search') }}" method="get" class="search-container">
+            <input class="search-bar" type="text" name="search" placeholder="Search">
+            <button class="search-btn" type="submit">
+                <img src="../../static/thumbnail/search.svg" alt="Search">
+            </button>
+        </form>
+
+        <div class="icon-container">
+            <div class="cart-icon" id="cart-link">
+               <img src="../../static/thumbnail/cart.svg" alt="">
+            </div>
+            <div class="order-icon" id="order-link" >
+                <img src="../../static/thumbnail/order-history.svg" alt="">
+             </div> 
+        </div>
+        <div class="profile-container">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture" onclick="window.location.href='/buyer_dashboard/buyer_profile';"> 
+            <span id="user-name">{{ username }}</span>
+          
+            <a href="/notification"><i class="fas fa-bell"></i></a>
+        </div>
+    </div>
+
+    <div class="main-container">
+        
+        <div class="profile-main-container">
+            <div class="profile-container2">
+                <div>   
+                    <img class="profile-img2" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt=""><br>
+                </div>
+            </div>
+            <div class="username">
+                <span id="username">{{ Fname }}</span> 
+            </div>
+        </div>
+       
+        
+        <div class="details-container">
+
+            <div class="profile-header">
+                <div>
+                    <h2>Buyer's Profile</h2>
+                    <h5>Manage and Protect your Account</h5>                    
+                </div>
+
+                <div class="setting-btn">
+                    <a href="/buyer_profile_form/update-profile"><i class="fa fa-cog"></i>Account Settings</a>
+                </div>
+
+            </div>
+
+            <div class="profile-details">
+                <p class="details"><strong>Full Name:</strong> <span id="fname">{{ Fname }}</span> <span id="mname">{{ Mname }}</span> <span id="lname">{{ Lname }}</span></p>
+                <p class="details"><strong>Email Addess:</strong> <span id="email"> {{ email  }}</span></p>
+                <p class="details"><strong>Gender:</strong> <span id="gender"> {{ gender }}</span></p>
+                <p class="details"><strong>Contact #:</strong> <span id="contact"> {{ contact_num }}</span></p>
+                <p class="details"><strong>Birth Date:</strong> <span id="birthdate"> {{ birthday }}</span></p>
+                <p class="details"><strong>Address:</strong> <span id="house#"> {{ houseNo }}</span> <span id="street"> {{ street }}</span> <span id="barangay"> {{ barangay }}</span> <span id="city"> {{ city }}</span> <span id="province"> {{ Province }}</span></p><br>
+              
+            </div>
+
+            <div class="logout-container">
+                <button class="logout-btn" onclick="confirmLogout()" >Logout</button>
+            </div>
+
+        </div>
+        
+    </div>
+    
+
+
+    
+    <footer class="footer-container">
+        <div class="footer-logo">
+            <img src="../../static/thumbnail/logo.png.png" alt="EcoHAven-Logo">
+        </div>
+
+        <div class="info-container">
+            <div class="devteam-container">
+                <ul>
+                    <li>EcoHaven-IT Development Team</li>
+                    <li>Elca, Eirich M. </li>
+                    <li>Oliveros, Roldan A.</li>
+                    <li>Villodo, Nina Clarisse R.</li>
+                    <li> Javier, Jonamie C.</li>
+                </ul>
+            </div>
+            <div class="social-container">
+                <ul>
+                    <li>Contact Us</li>
+                    <li><a href="#"> <i class="fab fa-facebook"></i> EcoHaven_Official</a></li>
+                    <li><a href="#"> <i class="fab fa-instagram"></i> @EcoHaven</a></li>
+                    <li><a href="#"> <i class="fas fa-envelope"></i> EcoHaven@gmai.com</a></li>
+                    <li><a href="#"> <i class="fab fa-tiktok"></i> EcoHaven_ph</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copy-right">
+            <p class="copy-right-text">© 2024 EcoHaven. All Rights Reserved .</p>
+        </div>
+        
+    </footer>
+       
+</body>
+<script>
+    function confirmLogout() {
+        
+        const confirmation = confirm("Are you sure you want to logout?");
+        if (confirmation) {
+            
+            window.location.href = "{{ url_for('logout') }}"; 
+        }
+    }
+</script>
+</html>

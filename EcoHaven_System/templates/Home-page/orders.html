@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/thumbnail/Homepage/orders.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&display=swap" rel="stylesheet">
+    <script src="/static/js-buyer/buyer.js"></script>
+    <script src="/static/js-buyer/error-message.js"></script>
+
+    <title>Place Order</title>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container" id="dashboard" >
+            <a href="../homepage/homepage.html"><img class="logo" src="../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+        
+        <div class="search-container" >
+        <input class="search-bar" type="text" placeholder="Search">
+        <button class="search-btn">
+                <img src="../../static/thumbnail/search.svg" alt="">
+        </button>
+        </div>
+
+        <div class="icon-container">
+            <div class="cart-icon" id="cart-link">
+                <img src="../../static/thumbnail/cart.svg" alt="">
+            </div>
+            <div class="order-icon" id="order-link" >
+                <img src="../../static/thumbnail/order-history.svg" alt="">
+            </div> 
+        </div>
+
+        <div class="profile-container"  id="profileInformationbuyer">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture"> 
+            <span id="user-name">{{ username }}</span>
+
+            <a href="/notification"><i class="fas fa-bell"></i></a>
+        </div>
+    </div>
+    <a class="chatbtn" href="/chat"><i class="fas fa-comments"></i> Chat</a>
+
+    <div class="main-container">
+        <div class="page-title">
+            Your Orders
+        </div>
+
+        <div class="orders-grid">
+            {% for order in orders %}
+                <div class="order-container">
+                    <div class="order-header">
+                        <div class="order-header-left-section">
+                            <div class="order-date">
+                                <div class="order-header-label">
+                                    Order Placed:
+                                </div>
+                                <div>
+                                    {{ order.created_at }}
+                                </div>
+                                <div class="order-status">
+                                    <div class="order-header-label">
+                                        Status: <span id="status"> {{ order.order_status }}</span> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="order-details-grid">
+                        <div class="product-image-container">  
+                            <img src="{{ url_for('static', filename='uploads/' + order.image) }}">
+                        </div>
+        
+                        <div class="product-details">
+                            <div class="product-name">
+                                {{ order.product_name }}
+
+                                <!-- <p class="variation">Variation:  <span id=""> {{ order.color }}</span> | <span id="">{{ order.size }}</span></p> -->
+                                
+                            </div>
+                            
+                            <div class="product-quantity">
+                                Total Quantity: {{ order.quantity }}
+                            </div>
+        
+                            <div class="price">
+                                <p>&#8369; <span>{{ order.total_price }}</span></p>
+                            </div>
+                            <div class="btn-container">
+                                <div >
+                                    <button class="buy-again-btn" onclick="window.location.href='/buyer_dashboard/productOverview/{{ order.product_id }}';">Buy Again</button>
+                                </div>
+                                <div>
+                                    <button class="rate-btn"
+                                    {% if order['has_rating'] or order['order_status'] != 'Completed' %} 
+                                    disabled 
+                                {% endif %}>Rate</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="product-actions">
+                            <a href="/track_order/{{ order.order_id }}">
+                                <button 
+                                    {% if order['has_rating'] or order['order_status'] == 'Cancelled' %} 
+                                        disabled 
+                                    {% endif %}
+                                    class="track-package-button">
+                                    Track package
+                                </button>
+                            </a>
+                            
+                            
+                            
+                                <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                                <button class="cancel-package-button" {% if order.order_status != 'Pending' %}disabled{% endif %}>
+                                    Cancel
+                                </button>
+                           
+                            
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div id="cancel-modal" class="cancel-modal">
+            <div class="cancel-modal-content">
+                <span class="cancel-close-btn">&times;</span>
+                <h2 style="text-align: center;">Cancel Order</h2>
+                <form action="/update_order_status_cancelled_user" method="POST" onsubmit="return confirmCancellation();">
+                    <input type="hidden" name="order_id" id="cancel-order-id" value="">
+                    
+                    <label for="reason">Please select a reason for cancellation:</label>
+                    <select name="reason" id="reason" required>
+                        <option value="" disabled selected>Select a reason</option>
+                        <option value="Changed mind">Changed mind</option>
+                        <option value="Found a better price">Found a better price</option>
+                        <option value="Order placed by mistake">Order placed by mistake</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    
+                    <button type="submit" class="submit-cancel-btn">Submit</button>
+                </form>
+            </div>
+        </div>
+        
+        
+        <div id="rate-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2 style="text-align: center;">Rate Product</h2>
+
+                <form action="/submit-rating" method="POST" enctype="multipart/form-data" onsubmit="return confirmStatusChange();">
+                    <input type="hidden" name="order_id" id="modal-order-id" value="">
+                    
+                    <label for="rating">Rating (1-5):</label>
+                    <div class="star-rating">
+                        <input type="radio" name="rating" value="1" id="1-star"><label for="1-star" class="fa fa-star"></label>
+                        <input type="radio" name="rating" value="2" id="2-stars"><label for="2-stars" class="fa fa-star"></label>
+                        <input type="radio" name="rating" value="3" id="3-stars"><label for="3-stars" class="fa fa-star"></label>
+                        <input type="radio" name="rating" value="4" id="4-stars"><label for="4-stars" class="fa fa-star"></label>
+                        <input type="radio" name="rating" value="5" id="5-stars"><label for="5-stars" class="fa fa-star"></label>
+                    </div>
+
+                    <div>
+                        <label for="description">Description:</label><br>
+                        <textarea name="description" id="description" rows="5" required></textarea>
+                    </div>
+
+                    <div class="file-container">
+                        <label for="picture">Upload Picture:</label><br>
+                        <input type="file" name="picture">
+                    </div>
+                  
+                    <button type="submit" class="submit-rating-btn">Submit Rating</button>
+                </form>
+            </div>
+        </div>       
+    </div>
+    
+    
+    
+    <footer class="footer-container">
+        <div class="footer-logo">
+            <img src="../../static/thumbnail/logo.png.png" alt="EcoHAven-Logo">
+        </div>
+
+        <div class="info-container">
+            <div class="devteam-container">
+                <ul>
+                    <li>EcoHaven-IT Development Team</li>
+                    <li>Elca, Eirich M. </li>
+                    <li>Oliveros, Roldan A.</li>
+                    <li>Villodo, Nina Clarisse R.</li>
+                    <li> Javier, Jonamie C.</li>
+                </ul>
+            </div>
+            <div class="social-container">
+                <ul>
+                    <li>Contact Us</li>
+                    <li><a href="#"> <i class="fab fa-facebook"></i> EcoHaven_Official</a></li>
+                    <li><a href="#"> <i class="fab fa-instagram"></i> @EcoHaven</a></li>
+                    <li><a href="#"> <i class="fas fa-envelope"></i> EcoHaven@gmai.com</a></li>
+                    <li><a href="#"> <i class="fab fa-tiktok"></i> EcoHaven_ph</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copy-right">
+            <p class="copy-right-text">© 2024 EcoHaven. All Rights Reserved .</p>
+        </div>
+    </footer>
+    
+    <script>
+        function confirmStatusChange() {
+            return confirm("Are you sure?");
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+        const rateButtons = document.querySelectorAll('.rate-btn');
+        const modal = document.getElementById('rate-modal');
+        const closeBtn = document.querySelector('.close-btn');
+        const modalOrderId = document.getElementById('modal-order-id');
+
+        // Show modal on button click
+        rateButtons.forEach((button) => {
+            button.addEventListener('click', function () {
+                const orderId = this.closest('.order-container').querySelector('input[name="order_id"]').value;
+                modalOrderId.value = orderId;
+                modal.style.display = 'block';
+            });
+        });
+
+        // Close modal
+        closeBtn.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
+
+        // Close modal if clicked outside content
+        window.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+    function cancelled() {
+        return confirm("Are you sure you want to cancel this order?");
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const cancelButtons = document.querySelectorAll('.cancel-package-button');
+        const cancelModal = document.getElementById('cancel-modal');
+        const closeCancelBtn = cancelModal.querySelector('.cancel-close-btn');
+        const cancelOrderId = document.getElementById('cancel-order-id');
+
+        // Show Cancel Order modal on button click
+        cancelButtons.forEach((button) => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault(); // Prevent default form action
+                const orderId = this.closest('.order-container').querySelector('input[name="order_id"]').value;
+                cancelOrderId.value = orderId;
+                cancelModal.style.display = 'block';
+            });
+        });
+
+        // Close Cancel Order modal
+        closeCancelBtn.addEventListener('click', function () {
+            cancelModal.style.display = 'none';
+        });
+
+        // Close modal if clicked outside content
+        window.addEventListener('click', function (e) {
+            if (e.target === cancelModal) {
+                cancelModal.style.display = 'none';
+            }
+        });
+    });
+
+    // Confirmation message before form submission
+    function confirmCancellation() {
+        return confirm("Are you sure you want to cancel this order?");
+    }
+
+
+
+    </script>
+    
+</body>
+</html>

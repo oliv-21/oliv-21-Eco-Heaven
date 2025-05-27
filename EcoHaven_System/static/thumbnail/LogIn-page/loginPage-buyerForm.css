@@ -1,0 +1,159 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E2E2E2;
+    font-family: roboto, Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.main-container{
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    margin: 20px;
+}
+
+
+.form-container{
+    background-color: #ffffff;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-container{
+    background-color: #ADC8EE;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;   
+}
+
+.logo{  
+    position: absolute;
+    width: 317px;
+}
+
+h3, .h3{
+    text-align: center;
+    margin: 20px 10px 20px 10px;   
+    color: #133056;
+    background-color: #ADC8EE;
+    border-radius: 2px;
+    padding: 4px;
+}
+
+.inputField label{
+    font-size: 16px;
+    font-weight: 500;
+    color: #2C3345;
+}
+
+.inputField input{
+    width: 454px;
+    height: 30px;
+    margin: 5px 0px 20px 20px;
+    font-size: 16px;
+    padding-left: 8px;
+    border-radius: 4px;
+    border: 1px solid #133056;
+    
+}
+
+p{
+    font-size: 16px;
+    font-weight: 500;
+    color: #2C3345;
+    margin-left: 20px;
+}
+
+.inputField2 input, .inputField2 select {
+    width: 213px;
+    height: 30px;
+    font-size: 16px;
+    margin: 5px 0px 20px 0px;
+    padding-left: 8px;
+    border-radius: 4px;
+    border: 1px solid #133056;
+    box-sizing: border-box;
+}
+
+/* Style the file input to look like a button */
+.inputField2 .file-input {
+    width: 213px;
+    height: 30px;
+    font-size: 16px;
+    margin: 5px 0px 20px 0px;
+    border: none;
+    box-sizing: border-box;
+}
+
+
+#gender{
+    width: 213px;
+    height: 30px;
+    font-size: 16px;
+    margin: 5px 0px 20px 0px;
+    padding-left: 8px;
+    border-radius: 4px;
+    border: 1px solid #133056;
+    box-sizing: border-box;
+}
+
+.inputField2 label{
+    font-size: 16px;
+    font-weight: 500;
+    color: #2C3345;
+}
+
+.inputField3 select{
+    flex: 1;
+    width: 135px;
+    height: 30px;
+    font-size: 16px;
+    margin: 5px 0px 30px 0px;
+    padding-left: 8px;
+    border-radius: 4px;
+    border: 1px solid #133056;
+    box-sizing: border-box;
+    
+}
+.container{
+    display: flex;  
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+
+.submit-btn{
+    width: 400px;
+    height: 40px;
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
+    background-color: #133056;
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    margin: 20px auto;
+}
+
+.submit-btn:hover{
+    opacity: 0.9;
+}
+.submit-btn:active{
+    opacity: 0.6;
+}
+
+.back{
+    margin: 10px 0px 0px 10px;
+    width: 30px;
+    height: 26px;
+    display: inline-block;
+}

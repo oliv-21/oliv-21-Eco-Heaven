@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../static/thumbnail/Rider-page/completed.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <a href="/rider_dashboard"><img class="logo" src="../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+
+        <div class="profile-container">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}"
+                 title="View Profile" style="cursor: pointer;"
+                 onclick="window.location.href='/rider_dashboard/rider_profile';">
+            <span id="user-name">{{Fname}}</span>
+         </div>   
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/rider_dashboard"><li>Available Deliveries</li></a>
+                <a href="/rider_dashboard/deliveries"><li >My Deliveries</li></a>
+                <a href="#"><li class="active">Completed Deliveries</li></a>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <form class="date-container" action="/Rider/rider-filtered" method="GET">
+                <div class="date-input">
+                    <label for="start-date">Start Date:</label>
+                    <input type="date" name="start_date" id="start-date" value="">
+                </div>
+                <div class="date-input">
+                    <label for="start-date">End Date:</label>
+                    <input type="date" name="end_date" id="end-date" value="">
+                </div>
+                <button class="filter-btn" type="submit">Filter</button>
+            </form>
+            <table class="sales-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Delivered Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in order_data %}
+                    <tr>
+                        <td class="orderID">          
+                            <span id="productID">{{order.order_id}}</span>
+                        </td>          
+                        <td><span id="name">{{order.fullname}}</td>     
+                        <td><span id="address"> {{order.Fulladdress}}</td>
+                        <td>{{order.updated_at}}</td>
+                    </tr>       
+                    {% endfor %}       
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </main>
+    </div>    
+</body>
+</html>

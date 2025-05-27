@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Stocks</title>
+    <link rel="stylesheet" href="../../static/thumbnail/seller-page/stocks.css">
+    <script src="/static/js-seller/Seller.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img class="logo" src="../../static/thumbnail/logo.png.png" alt="">
+        </div>
+
+        <div class="profile-container" id="sellerinformation">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture"> 
+            <span id="user-name">{{ username }}</span>
+            <a href="/seller-notification  "><i class="fas fa-bell"></i></a>
+         </div>   
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/seller_dashboard"><li   >Dashboard</li></a>
+                <a href="/seller-page/products"><li    >Products</li></a>
+                <a href="/seller/update-stock"><li class="active" > Stocks</li> </a>
+                <a href="/seller/sales"><li  >Sales</li></a>
+                <a href="/seller/orders"><li  >Orders</li></a>
+            </ul>
+        </nav>
+
+        <a class="chatbtn" href=" /chat-seller "><i class="fas fa-comments"></i> Chat</a>
+
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="search-container">
+                <form action="{{ url_for('update_stocks') }}" method="get" class="search-container">
+                    <input class="search-bar" type="text" name="search" placeholder="Search"value="{{ request.args.get('search', '') }}">
+                    <button class="search-btn" type="submit">
+                        <img src="../../static/thumbnail/search.svg" alt="">
+                    </button>
+                </form>
+            </div>
+    
+            <div class="header-container">
+                <div class="column-1"> <p>Image</p> </div>
+                <div class="column-2"> <p>Product Name</p> </div>
+                <div class="column"> <p>Unit Price</p> </div>   
+                <div class="column"> <p>Action</p> </div>
+            </div>
+            {% if products %}
+                {% for product in products %}
+
+                    <div class="product-container">
+                        <div class="item-container">
+
+                            <div class="column-1"> 
+                                <img class="item-img" src="{{ url_for('static', filename='uploads/' + product.Image) }}" alt="{{ product.Product_Name }}"> 
+                            </div>
+
+                            <div class="column-name"> {{ product.Product_Name }} </div>
+
+                            <div class="column"> <p>    &#8369; {{ product.Price }} </p> </div>
+
+
+                            
+                                
+                                <div class="column-action" > 
+                                    <button type="submit"class="update-btn" onclick="window.location.href='/seller-page-item/stocks/{{ product.Id }}';">View</button>
+                                </div>
+                            
+
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No products available.</p>
+            {% endif %}
+            <div class="pagination">
+                <!-- 'Previous' Button -->
+                {% if current_page > 1 %}
+                    <a href="{{ url_for('update_stocks', page=current_page - 1) }}">
+                        <button><i class="fas fa-angle-left"></i></button>
+                    </a>
+                {% endif %}
+            
+                <!-- Page Buttons -->
+                {% for page in range(1, total_pages + 1) %}
+                    <a href="{{ url_for('update_stocks', page=page) }}">
+                        <button {% if page == current_page %}class="active"{% endif %}>
+                            {{ page }}
+                        </button>
+                    </a>
+                {% endfor %}
+            
+                <!-- 'Next' Button -->
+                {% if current_page < total_pages %}
+                    <a href="{{ url_for('update_stocks', page=current_page + 1) }}">
+                        <button><i class="fas fa-angle-right"></i></button>
+                    </a>
+                {% endif %}
+            </div>
+            
+        </main>
+    </div>
+</body>
+</html>

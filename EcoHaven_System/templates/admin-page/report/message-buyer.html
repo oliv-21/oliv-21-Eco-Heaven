@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../../static/thumbnail/Admin-page/report/message.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <a href="../seller-page/dashboard.html"><img class="logo" src="../../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+
+        <div class="profile-container">
+            <img class="profile-img" src="../../../static/thumbnail/eirich2.jpg" alt="">
+            <span id="user-name">Admin</span>
+        </div>       
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="../dashboard.html"><li>Dashboard</li></a>
+                <li class="dropdown">
+                    Account Management
+                    <ul class="dropdown-menu">
+                        <a href="/admin_dashboard/account-management"><li>Seller Account </li></a>
+                        <a href="/account-management/requestAcc-rider"><li>Rider Account </li></a>
+                    </ul>
+                </li>                <a href="../blocked-list/blocked-list.html"><li>Blocked List</li></a>
+                <li class="active">Report</li>
+                <a href="/admin_sales"><li>Sales </li></a>
+                <a href="/logout" onclick="return confirm('Are you sure you want to logout?')" ><li class="logout">Logout</li></a>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <a class="back" href="reported-buyers.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
+            
+            <div class="message-form">
+                <h2>Notify Buyer</h2>
+                
+                <div class="buyer-info">
+                    <label for="buyer-name">To:</label>
+                    <input type="text" id="buyer-name" name="buyer-name" value="Buyer Name" readonly>
+                </div>
+                
+                <div class="message-content">
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" rows="6">Dear [Buyer Name], you have been reported by another user due to certain concerns regarding your conduct. Please review your recent transactions and be mindful of platform policies.</textarea>
+                </div>
+                
+                <button type="submit" class="send-button"><i class="fa-solid fa-paper-plane"></i> Send Message</button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

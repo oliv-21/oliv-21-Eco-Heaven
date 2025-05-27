@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/thumbnail/Homepage/product-overview.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&display=swap" rel="stylesheet">
+    <script src="/static/js-buyer/buyer.js"></script>
+    <script src="/static/js-login/error-message.js"></script>
+
+    <title>Product Overview</title>
+    
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container" id="dashboard">
+            <a href="/buyer_dashboard"><img class="logo" src="../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+        
+        <form action="{{ url_for('search') }}" method="get" class="search-container">
+            <input class="search-bar" type="text" name="search" placeholder="Search">
+            <button class="search-btn" type="submit">
+                <img src="../../static/thumbnail/search.svg" alt="Search">
+            </button>
+        </form>
+
+        <div class="icon-container">
+            <div class="cart-icon" id="cart-link">
+               <img src="../../static/thumbnail/cart.svg" alt="">
+            </div>
+            <div class="order-icon" id="order-link" >
+                <img src="../../static/thumbnail/order-history.svg" alt="">
+             </div> 
+        </div>
+        <div class="profile-container">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture" onclick="window.location.href='/buyer_dashboard/buyer_profile';"> 
+            <span id="user-name">{{ username }}</span>
+          
+            <a href="/notification"><i class="fas fa-bell"></i></a>
+        </div>
+    </div>
+    <a class="chatbtn" href="/chat"><i class="fas fa-comments"></i> Chat</a>
+
+    <div class="main-container">
+        <div class="sub-container">
+            <div class="product-image-container"> 
+                <img class="product-img" src="{{ url_for('static', filename='uploads/' + productpic) }}" alt="">
+            </div>
+    
+            <div class="details-container">
+                <div class="product-name">
+                    {{ productName }}
+                </div>
+                <div class="review-container">
+                    <div class="sold-container">
+                        <p><span>{{solds }} </span>  sold</p>
+                    </div>
+                    
+                    <div class="rating-container">
+                        <img src="../../static/thumbnail/star.svg" alt="">
+                        {{ratings}}
+                    </div>
+                </div>
+    
+                <div class="product-price">
+                    <p>&#8369; <span>{{ price }}</span></p>
+                </div>
+                
+                <div class="variation-container">
+                    <div class="type-container">
+                        <!-- <span id="variation-type">Color</span> -->
+                    </div>
+                
+                    <div class="value-container">
+                        {% for variation in variations %}
+                            {% if variation.color %}
+                                <button class="button-variation"
+                                    data-color="{{ variation.color }}"
+                                    onclick="selectVariation(this)">
+                                    
+                                    <span id="variation-value">{{ variation.color }}</span>
+                                </button>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="variation-container2">
+                    <div class="type-container2">
+                        <!-- <span id="variation-type2">Size</span> -->
+                    </div>
+                
+                    <div class="value-container2">
+                        {% for variation in variations %}
+                            {% if variation.color %}
+                                {% for size in variation.sizes %}
+                                    {% if size %}
+                                        <button class="button-variation2" 
+                                                data-size="{{ size }}" 
+                                                onclick="selectSize(this)">
+                                            <span id="variation-value2">{{ size }}</span>
+                                        </button>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="quantity-container">
+                    <input type="hidden" name="item_id" value="">
+                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, -1)">-</button>
+                    <input type="text" class="quantity" value="1" readonly>
+                    <button type="button" class="quantity-btn" onclick="updateQuantity(this, 1)">+</button>
+                </div>
+                
+
+                <div class="buttons-container">
+                    <div class="addtocart-btn">
+                        <form action="{{ url_for('add_to_cart') }}" method="POST">
+                            <input type="hidden" name="product_id" value="{{ product_id }}">
+                            <input type="hidden" name="productName" value="{{ productName }}">
+                            <input type="hidden" name="description" value="{{ description }}">
+                            <input type="hidden" name="shop_name" value="{{ sellershopname }}">
+                            <input type="hidden" name="price" value="{{ price }}">
+                            <input type="hidden" name="product_image" value="{{ productpic }}">
+                            <input type="hidden" name="quantity" id="quantityInput" value="1">
+                            <input type="hidden" name="selected_color" id="selectedColor" value="">
+                            <input type="hidden" name="selected_size" id="selectedSize" value="">
+                            <input type="hidden" name="quantity" id="quantityInput" value="1">
+                            
+                            <button type="submit" class="addtocart-btn" onclick="setSelectedValues()">ADD TO CART</button>
+                        </form>
+                    </div>
+
+                    <div class="buynow-btn">
+                        <form action="{{ url_for('directbuying', product_id=product_id) }}" method="POST">
+                            <input type="hidden" name="product_id" value="{{ product_id }}">
+                            <input type="hidden" name="quantity" id="quantityInputbuy" value="1">
+                            <input type="hidden" name="selected_color" id="buyNowColor" value="">
+                            <input type="hidden" name="selected_size" id="buyNowSize" value="">
+                            <input type="hidden" name="quantity" id="quantityInputbuy" value="1">
+                            <input type="hidden" name="price" value="{{ price }}">
+                            <input type="hidden" name="buying" value= 1 >
+                            <!-- <input type="hidden" name="selected_items[]"  value="{{ product_id }}" data-color="{{ buyNowColor }}" data-size="{{ buyNowSize }}" data-price="{{ price }}"> -->
+                            <button type="submit" onclick="setSelectedValuesbuyer()">BUY NOW</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="shop-container">
+            <div class="shop-profile">
+                <a href="/buyer_dashboard/seller-profile/{{ seller_id }}">
+                    <!-- Ensure sellerpic contains binary image data -->
+                    <img id="shop-image" src="{{ url_for('static', filename='uploads/' + seller_logo) }}" alt="Seller Profile Image">
+                </a>
+            </div>
+
+            <div class="shop-name">
+                <span><p>{{ sellershopname }}</p></span>
+                <span class="shop-address"> Santa Cruz Laguna</span>
+            </div>
+
+            <button onclick="window.location.href='/buyer_dashboard/seller-profile/{{ seller_id }}'" class="visit-btn">Visit</button>
+
+        </div>
+
+        <div class="description-container">
+           <h3 class="h3">Product Description:</h3>
+           <span class="description-details">{{ description }}</span>
+        </div>
+
+        <div class="reviews-container">
+            <h3 class="h3">Ratings & Reviews</h3>  
+            {% if reviews %}
+                {% for review in reviews %}  
+                    <div class="buyer-container">
+                        <div class="rating-buyer-profile"> <img src="{{ url_for('static', filename='uploads/' + review.profile_pic) }}" alt="">  </div>
+
+                        <div class="rate-details">
+                            <div><p>{{ review.Fullname }}</p> </div>
+
+                            <div><img class="star-img" src="../../static/thumbnail/4star.png" alt=""></div>
+
+                            <div class="rate-description">
+                                {{review.description}}
+                            </div>
+
+                            <div class="rate-img">
+                                <img src="{{ url_for('static', filename='uploads/' + review.product_pic) }}" alt="">
+                            </div>
+                        </div>
+                        
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No reviews.</p>
+            {% endif %}
+            
+         </div>
+        
+    </div>
+
+    <footer class="footer-container">
+        <div class="footer-logo">
+            <img src="../../static/thumbnail/logo.png.png" alt="EcoHaven-Logo">
+        </div>
+
+        <div class="info-container">
+            <div class="devteam-container">
+                <ul>
+                    <li>EcoHaven-IT Development Team</li>
+                    <li>Elca, Eirich M.</li>
+                    <li>Oliveros, Roldan A.</li>
+                    <li>Villodo, Nina Clarisse R.</li>
+                    <li>Javier, Jonamie C.</li>
+                </ul>
+            </div>
+            <div class="social-container">
+                <ul>
+                    <li>Contact Us</li>
+                    <li><a href="#"> <i class="fab fa-facebook"></i> EcoHaven_Official</a></li>
+                    <li><a href="#"> <i class="fab fa-instagram"></i> @EcoHaven</a></li>
+                    <li><a href="#"> <i class="fas fa-envelope"></i> EcoHaven@gmail.com</a></li>
+                    <li><a href="#"> <i class="fab fa-tiktok"></i> EcoHaven_ph</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copy-right">
+            <p class="copy-right-text">© 2024 EcoHaven. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div> 
+
+    <script>
+
+        
+        
+        
+        let selectedColor = '';
+        let selectedSize = '';
+
+        function selectVariation(button) {
+            selectedColor = button.getAttribute('data-color');
+            console.log('Selected Color:', selectedColor);
+        }
+
+        function selectSize(button) {
+            selectedSize = button.getAttribute('data-size');
+            console.log('Selected Size:', selectedSize);
+        }
+
+        function setSelectedValues() {
+            
+            document.getElementById('selectedColor').value = selectedColor  || '';
+            document.getElementById('selectedSize').value = selectedSize  || '';
+        }
+        function setSelectedValuesbuyer() {
+            console.log("Buy Now function called");
+            document.getElementById('buyNowColor').value = selectedColor || '';
+            document.getElementById('buyNowSize').value = selectedSize || '';
+            console.log("Selected Color:", selectedColor);
+            console.log("Selected Size:", selectedSize);
+        }
+
+        // <!-- yung sa baba color ata -->
+        const variationButtons = document.querySelectorAll('.button-variation');
+        const variationButtons2 = document.querySelectorAll('.button-variation2');
+
+       variationButtons.forEach(button => {
+           button.addEventListener('click', () => {
+               // Check if the button is already selected
+               if (button.classList.contains('selected')) {
+                   // If selected, remove the 'selected' class
+                   button.classList.remove('selected');
+               } else {
+                   // If not selected, remove 'selected' class from all buttons
+                   variationButtons.forEach(btn => {
+                       btn.classList.remove('selected');
+                   });
+                   // Add 'selected' class to the clicked button
+                   button.classList.add('selected');
+               }
+           });
+       });
+
+       variationButtons2.forEach(button => {
+           button.addEventListener('click', () => {
+               // Check if the button is already selected
+               if (button.classList.contains('selected')) {
+                   // If selected, remove the 'selected' class
+                   button.classList.remove('selected');
+               } else {
+                   // If not selected, remove 'selected' class from all buttons
+                   variationButtons2.forEach(btn => {
+                       btn.classList.remove('selected');
+                   });
+                   // Add 'selected' class to the clicked button
+                   button.classList.add('selected');
+               }
+           });
+       });
+
+       
+       function updateQuantity(button, change) {
+        // Find the quantity input within the same container as the button
+        const quantityInput = button.parentElement.querySelector('.quantity');
+        
+        // Update quantity value
+        let quantity = parseInt(quantityInput.value) + change;
+        if (quantity < 1) quantity = 1; // Ensure the minimum quantity is 1
+        quantityInput.value = quantity;
+        
+        // Update the hidden quantity field in the form
+        document.getElementById('quantityInput').value = quantity;
+        document.getElementById('quantityInputbuy').value = quantity;
+    }
+   </script>
+
+
+        
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Orders</title>
+    <link rel="stylesheet" href="../../../static/thumbnail/seller-page/orders/toship.css">
+    <script src="/static/js-seller/Seller.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img class="logo" src="../../static/thumbnail/logo.png.png" alt="">
+        </div>
+        <div class="profile-container" id="sellerinformation">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture"> 
+            <span id="user-name">{{ username }}</span>
+            <a href=" /seller-notification "><i class="fas fa-bell"></i></a>
+         </div>  
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/seller_dashboard"><li >Dashboard</li></a>
+                <a href="/seller-page/products"><li    >Products</li></a>
+                <a href="/seller/update-stock"><li > Stocks</li> </a>
+                <a href="/seller/sales"><li  >Sales</li></a>
+                <a href="/seller/orders"><li  class="active"  >Orders</li></a>
+            </ul>
+        </nav>
+        <a class="chatbtn" href=" /chat-seller "><i class="fas fa-comments"></i> Chat</a>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <nav class="navbar-container"> 
+                <ul class="navbar">
+                    <li><a  href="{{ url_for('orders') }}">Orders (All)</a></li>
+                    <li><a class="nav-active" href="{{ url_for('toship') }}">To Ship</a></li>
+                    <li><a href="{{ url_for('shipping') }}">Shipping</a></li>
+                    <li><a  href="/seller/orders_completed">Completed</a></li>
+                    <li><a href="{{ url_for('cancelled') }}">Cancellation</a></li>
+                </ul>
+            </nav>
+ 
+    
+            {% if products %}
+                 {% for product in products %}
+                    <div class="product-container">
+                        <div class="shop-name-header" onclick="window.location.href='/seller/report/{{ product.buyer_id }}'">     
+                            <img class="buyer-profile" src="{{ url_for('static', filename='uploads/' + product.profile_pic) }}" alt="">
+                            <span id="buyer-username">{{ product.email }}</span>
+                        </div>
+
+                        <div class="item-container">        
+
+                            <div class="column-1"> <img class="item-img" src="{{ url_for('static', filename='uploads/' + product.Image) }}" alt=""> </div>
+
+                            <div class="column-name"> {{ product.Product_Name }} </div>
+
+                            <div class="column"> {{ product.quantity }} </div>
+
+                            <div class="column"> &#8369;{{ product.total_price }}</div>
+
+
+                            <div class="column-action"> 
+                             <input type="hidden" name="order_id" value="{{ product.order_id }}">
+                             <button type="button" class="accept-btn" onclick="openRiderModal('{{ product.order_id }}')">Select Rider</button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No products available.</p>
+            {% endif %}
+           
+            
+        </main>
+    </div>
+    
+    <div id="riderModal" class="modal rider-modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeRiderModal()">&times;</span>
+            <h2>Select a Rider</h2>
+            <form action="/assign_rider" method="POST">
+                <input type="hidden" id="modal_order_id" name="order_id" value="">
+                <select name="rider_id" required>
+                    {% for rider in riders %}
+                        <option value="{{ rider.rider_id }}">
+                            {{rider.full_name }} ({{ rider.mobile_number }})
+                        </option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                <button type="submit" class="accept-btn">Ship</button>
+            </form>
+        </div>
+    </div>
+
+
+</body>
+<script>
+    function toship() {
+        return confirm("Are you sure ?");
+    }
+</script>
+<script>
+function openRiderModal(orderId) {
+    document.getElementById("modal_order_id").value = orderId;
+    document.getElementById("riderModal").style.display = "block";
+}
+
+function closeRiderModal() {
+    document.getElementById("riderModal").style.display = "none";
+}
+function openRiderModal(orderId) {
+    document.getElementById("modal_order_id").value = orderId;
+    document.getElementById("riderModal").style.display = "block";
+}
+
+function closeRiderModal() {
+    document.getElementById("riderModal").style.display = "none";
+}
+</script>
+
+</html>

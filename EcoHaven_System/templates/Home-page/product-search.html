@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../static/thumbnail/Homepage/product-search.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script src="/static/js-buyer/buyer.js"></script>
+
+    <title>Homepage</title>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container" id="dashboard">
+            <a href="/buyer_dashboard"><img class="logo" src="../../static/thumbnail/logo.png.png" alt=""></a>
+        </div>
+        
+        <form action="{{ url_for('search') }}" method="get" class="search-container">
+            <input class="search-bar" type="text" name="search" placeholder="Search">
+            <button class="search-btn" type="submit">
+                <img src="../../static/thumbnail/search.svg" alt="Search">
+            </button>
+        </form>
+
+        <div class="icon-container">
+            <div class="cart-icon" id="cart-link">
+               <img src="../../static/thumbnail/cart.svg" alt="">
+            </div>
+            <div class="order-icon" id="order-link" >
+                <img src="../../static/thumbnail/order-history.svg" alt="">
+             </div> 
+        </div>
+        <div class="profile-container">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture" onclick="window.location.href='/buyer_dashboard/buyer_profile';"> 
+            <span id="user-name">{{ username }}</span>
+          
+            <a href="/notification"><i class="fas fa-bell"></i></a>
+        </div>
+    </div>
+    <a class="chatbtn" href="/chat"><i class="fas fa-comments"></i> Chat</a>
+
+    <div class="main-container">
+        <div class="mid-container">          
+                <h3> <a class="back" href="/buyer_dashboard"><i class="fa-solid fa-arrow-left"></i></a>Result:</h3>
+                <p class="item-search"><span id="search">{{ search }}</span> </p>             
+        </div>
+        
+
+        <div class="product-container">
+            {% for product in products %}
+                <div class="product-card" onclick="window.location.href='/buyer_dashboard/productOverview/{{ product.Id }}';">
+
+                    <div class="product-image-container">
+                        <img class="product-img"  src="{{ url_for('static', filename='uploads/' +product.Image) }}" alt="">
+                    </div>
+
+                    <div class="product-name">
+                        <span class="name">{{ product.Product_Name }}</span> 
+                    </div>
+
+                    <div class="product-price">
+                        <p>&#8369; {{ product.Price }}</p>
+                    </div>
+
+                    <div class="review-container">
+                        <div class="sold-container">
+                            {{ product.total_sold }} sold
+                        </div>
+
+                        <div class="rating-container">
+                            <img src="../../static/thumbnail/star.svg" alt="">
+                            {{ product.Rating }}
+                        </div>
+                    </div>
+                </div>
+               
+            {% endfor %}
+          
+        </div>   
+    </div>
+    
+    <footer class="footer-container">
+        <div class="footer-logo">
+            <img src="../../static/thumbnail/logo.png.png" alt="EcoHAven-Logo">
+        </div>
+
+        <div class="info-container">
+            <div class="devteam-container">
+                <ul>
+                    <li>EcoHaven-IT Development Team</li>
+                    <li>Elca, Eirich M. </li>
+                    <li>Oliveros, Roldan A.</li>
+                    <li>Villodo, Nina Clarisse R.</li>
+                    <li> Javier, Jonamie C.</li>
+                </ul>
+            </div>
+            <div class="social-container">
+                <ul>
+                    <li>Contact Us</li>
+                    <li><a href="#"> <i class="fab fa-facebook"></i> EcoHaven_Official</a></li>
+                    <li><a href="#"> <i class="fab fa-instagram"></i> @EcoHaven</a></li>
+                    <li><a href="#"> <i class="fas fa-envelope"></i> EcoHaven@gmai.com</a></li>
+                    <li><a href="#"> <i class="fab fa-tiktok"></i> EcoHaven_ph</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="copy-right">
+            <p>© 2024 EcoHaven. All Rights Reserved .</p>
+        </div>
+        
+    </footer>
+       
+</body>
+</html> 

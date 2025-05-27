@@ -1,0 +1,503 @@
+
+combine color
+def get_product_variations(product_id):
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    variations = []
+
+    try:
+        # Get unique colors for the product
+        cursor.execute("SELECT DISTINCT color FROM ProductVariations WHERE product_id = %s", (product_id,))
+        colors = cursor.fetchall()
+        
+        for color in colors:
+            #print(f"Processing color: {color['color']}")  # Debugging line
+            # For each color, get available sizes
+            cursor.execute("SELECT size FROM ProductVariations WHERE product_id = %s AND color = %s", (product_id, color['color']))
+            size_rows = cursor.fetchall()
+            sizes = [row['size'] for row in size_rows]
+            #print(f"Sizes for color {color['color']}: {sizes}")  # Debugging line
+            
+            variations.append({'color': color['color'], 'sizes': sizes})
+    
+    except mysql.connector.Error as err:
+        #print(f"Error: {err}")
+    
+    finally:
+        cursor.close()
+        connection.close()
+    
+    return variations
+
+
+    not combine color
+    def get_product_variations(product_id):
+    # Connect to your database
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    
+    variations = []
+    
+    try:
+        cursor = connection.cursor()
+        # Query to select variations for the specified product
+        cursor.execute("SELECT color, size, id, stock FROM ProductVariations WHERE product_id = %s", (product_id,))
+        rows = cursor.fetchall()
+        
+        # Process rows into a list of dictionaries
+        for row in rows:
+            variations.append({'color': row[0], 'size': row[1]})
+    
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
+    
+    finally:
+        cursor.close()
+        connection.close()
+    
+    return variations
+
+
+    <div class="variation-container">
+        <div class="type-container"><span id="variation-type">Color</span></div>
+        <div class="value-container">
+            {% for variation in variations %}
+                {% if variation.color %}
+                    <button class="button-variation" 
+                            data-color="{{ variation.color }}" 
+                            onclick="selectVariation(this)">
+                        {{ variation.color }}
+                    </button>
+                    
+                    <!-- Sizes for each color -->
+                    <div class="variation-container2">
+                        <div class="type-container2"><span id="variation-type2">Size</span></div>
+                        <div class="value-container2">
+                            {% for size in variation.sizes %}
+                                {% if size %}
+                                    <button class="button-variation2" 
+                                            data-size="{{ size }}" 
+                                            onclick="selectSize(this)">
+                                        {{ size }}
+                                    </button>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    
+
+
+    @app.route('/', methods=['POST', 'GET'])
+    def login():
+        if request.method == 'POST':
+            email = request.form['username']
+            password = request.form['password']
+    
+            connection = get_db_connection()
+            cursor = connection.cursor(dictionary=True)
+    
+            # Retrieve user based on email
+            cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+            user = cursor.fetchone()
+            cursor.close()
+            connection.close()
+    
+            if user:
+                # Check if the user is approved
+                if user['approval'] == 0:
+                    return redirect(url_for('login', error="Your account is not approved yet"))
+                
+                # Check if the user is active
+                if user['active'] == 'DEACTIVE':
+                    return redirect(url_for('login', error="Your account has been blocked"))
+    
+                # Validate password
+                if check_password_hash(user['password'], password):
+                    session['id'] = user['user_id']
+                    session['role'] = user['role_id']
+    
+                    # Role-based redirection
+                    if session['role'] == 1:
+                        return redirect(url_for('buyer_dashboard'))
+                    elif session['role'] == 2:
+                        return redirect(url_for('seller_dashboard'))
+                    elif session['role'] == 3:
+                        return redirect(url_for('admin_dashboard'))
+                else:
+                    # Invalid password
+                    return redirect(url_for('login', error="Invalid email or password"))
+            else:
+                # User not found
+                return redirect(url_for('login', error="User not found"))
+    
+        # Render login page if GET request
+        return render_template('Login-page/LoginPage.html', error=request.args.get('error'))
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Dashboard</title>
+    <link rel="stylesheet" href="../../static/thumbnail/seller-page/stocks-view-all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img class="logo" src="../../static/thumbnail/logo.png" alt="">
+        <div class="profile-container">
+            <img class="profile-img" src="{{ profile_pic }}" alt="">
+            <span id="user-name">{{ username }}</span>
+        </div>       
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="dashboard.html" id="dashboard-link"><li>Dashboard</li></a>
+                <a href="product.html" id="product-link"><li>Products</li></a>
+                <li class="active">Stocks</li>
+                <li>Sales</li>
+                <li id="all-orders" >Order</li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->   
+        <main class="main-content">
+            <div class="sub-container">
+                <a class="back" href="/seller/update-stock"><i class="fa-solid fa-arrow-left"></i> Back</a>
+                <div class="product-container">
+                    <div class="product-image">
+                        <img src="{{ product_pic }}" alt="">
+                    </div>
+
+                    <div class="product-name">   
+                        <p>{{ product_name }}</p>
+                    </div>
+                </div>
+
+                <div class="variation-container">
+                    <h3>Stock Management</h3>
+                    <div class="header-container">
+                        <div class="variation-header">Variation</div> 
+                        <div class="stocks-header">Total Stocks</div>
+                        <div class="action-header">Actions</div>                        
+                    </div>
+
+                    {% for variation in variations %}
+                    <div class="row-container">                     
+                        <div class="variation-value"><span>{{ variation.color }}</span></div>
+
+                        <div class="row-container2">
+                            {% for size in variation.sizes %}
+                            <div class="row-sub-container">
+                                <div class="size-container">
+                                    <span>{{ size.name }}</span>
+                                </div>
+
+                                <div class="stocks-container"><span>{{ size.stock }}</span>&times;</div>
+                                
+                                <div class="quantity-container">
+                                    <button class="quantity-btn">-</button>
+                                    <input type="text" class="quantity" value="{{ size.stock }}" readonly>
+                                    <button class="quantity-btn">+</button>
+                                </div>
+                                
+                                <div class="update-container">
+                                    <button class="update-btn">Update</button>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>               
+                    </div>
+                    {% endfor %}
+                </div>    
+            </div>    
+        </main>
+    </div>  
+</body>
+</html>
+
+
+
+
+
+
+SELECT products.ID, products.product_name, SUM(orders.quantity) AS total_sold
+FROM orders
+JOIN products ON products.Id = orders.product_id
+WHERE orders.order_status = 'Completed' AND orders.seller_id =6
+GROUP BY products.ID
+ORDER BY total_sold DESC
+LIMIT 3;
+
+
+
+
+
+try:
+        # Get the submitted form data (without email and password)
+        fname = request.form['Fname']
+        lname = request.form['Lname']
+        mname = request.form['Mname']
+        contact_num = request.form['number']
+        gender = request.form['gender']
+
+        # Update the user account information in the database (excluding email and password)
+        cursor.execute("""
+            UPDATE sellers 
+            SET Fname = %s, Lname = %s, Mname = %s, mobile_number = %s, gender = %s
+            WHERE user_id = %s
+        """, (fname, lname, mname, contact_num, gender, session['id']))
+
+        # Commit the transaction
+        connection.commit()
+
+        # Success message
+        return redirect(url_for('update_profile', success="Account information updated successfully"))
+
+    except Exception as e:
+        # Rollback if there's an error
+        connection.rollback()
+        #print(f"Error: {str(e)}")
+        return redirect(url_for('update_profile', error=f"Error: {str(e)}"))
+
+    finally:
+        cursor.close()
+        connection.close()
+        #print("Database connection closed.")
+
+
+
+
+
+
+
+
+
+
+        @app.route('/buyer_dashboard/seller-profile-report/<int:seller_id>', methods=['GET'])
+def buyersellerprofilereport(seller_id):
+    username, profile_pic = buyerid()
+    return render_template('Home-page/message-report.html', username=username, profile_pic=profile_pic, seller_id=seller_id)
+
+
+
+
+
+
+
+    @app.route('/admin_sales', methods=["GET"])
+def admin_sales():
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+
+    # Get the shop_name from query parameters
+    shop_name = request.args.get('shop_name', '').strip()  # Default to an empty string
+
+    # Base SQL query
+    base_query = """
+        SELECT s.seller_id, s.shop_name, s.shop_logo, COUNT(o.order_id) AS completed_orders,
+               SUM(o.total_price) AS totalprice,
+               SUM(o.total_price) * 0.05 AS total_price_5_percent
+        FROM orders o
+        JOIN sellers s ON s.seller_id = o.seller_id
+        WHERE o.order_status = 'Completed'
+    """
+
+    # Add a search condition if shop_name is provided
+    if shop_name:
+        base_query += " AND s.shop_name LIKE %s"
+
+    base_query += " GROUP BY s.seller_id, s.shop_name;"
+
+    try:
+        if shop_name:
+            cursor.execute(base_query, (f"%{shop_name}%",))
+        else:
+            cursor.execute(base_query)
+
+        commissions = cursor.fetchall()
+        for commission in commissions:
+            commission['totalprice'] = round(commission['totalprice'] or 0, 2)
+            commission['total_price_5_percent'] = round(commission['total_price_5_percent'] or 0, 2)
+
+        # Calculate the sum of total_price_5_percent with 2 decimal places
+        commissions_sum = round(sum(commission['total_price_5_percent'] for commission in commissions), 2)
+
+    finally:
+        cursor.close()
+        connection.close()
+
+    return render_template('admin-page/sales.html', commissions=commissions, commissions_sum=commissions_sum, shop_name=shop_name)
+
+
+
+
+@app.route('/download-sales-report-admin')
+def download_sales_report_admin():
+    # Retrieve the start and end date from the query parameters
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+
+    # Default to the last 30 days if no dates are provided
+    if not start_date:
+        start_date = (datetime.today() - timedelta(days=30)).strftime('%Y-%m-%d')  # 30 days ago
+    if not end_date:
+        end_date = datetime.today().strftime('%Y-%m-%d')
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    print(start_date)
+    print(end_date)
+
+   
+
+    # Fetch sales data
+    cursor.execute("""
+        SELECT s.seller_id, s.shop_name, s.shop_logo, COUNT(o.order_id) AS completed_orders, o.updated_at, o.created_at,
+            SUM(o.total_price) AS totalprice,
+            SUM(o.total_price) * 0.05 AS total_price_5_percent
+        FROM orders o
+        JOIN sellers s ON s.seller_id = o.seller_id
+        WHERE o.order_status = "Completed"
+        AND o.updated_at BETWEEN %s AND %s
+        GROUP BY s.seller_id
+       
+    """, (start_date, end_date))
+
+
+
+
+
+
+
+
+
+
+@app.route('/approve-user-seller/<int:user_id>', methods=['POST'])
+def approve_user_seller(user_id):
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    try:
+        # Fetch full name of the user
+        cursor.execute(
+            """
+            SELECT 
+                CASE 
+                    WHEN b.user_id IS NOT NULL THEN CONCAT(b.Lname, ' ', b.Fname, ' ', COALESCE(b.Mname, ''))
+                    WHEN s.user_id IS NOT NULL THEN CONCAT(s.Lname, ' ', s.Fname, ' ', COALESCE(s.Mname, ''))
+                END AS FullName
+            FROM users 
+            LEFT JOIN buyers b ON b.user_id = users.user_id
+            LEFT JOIN sellers s ON s.user_id = users.user_id
+            WHERE users.user_id = %s
+            """,
+            (user_id,)
+        )
+        fullname_result = cursor.fetchone()
+        if not fullname_result or not fullname_result['FullName']:
+            print("User not found.")
+            return redirect(url_for('admin_blocked_list_buyers', error="User not found."))
+        
+        fullname = fullname_result['FullName']
+        
+        # Fetch recipient email from the database
+        cursor.execute("SELECT email FROM users WHERE user_id = %s", (user_id,))
+        email_result = cursor.fetchone()
+        recipient_email = email_result['email'] if email_result else None
+
+        if not recipient_email:
+            print("Recipient email not found.")
+            return redirect(url_for('admin_management_requestAcc_seller', error="Recipient email not found."))
+
+        # Prepare and send the email
+        message_content = f"""Dear {fullname},
+
+We are delighted to inform you that your EcoHaven account has been successfully approved. 
+You now have full access to our platform, where you can discover and enjoy a wide range of home and garden products.
+
+If you have any questions or require assistance as you navigate the platform, please feel free to reach out to our support team.
+
+Welcome to EcoHaven, and thank you for being part of our community.
+
+Sincerely,
+The EcoHaven Team"""
+        
+        # Update approval status
+        cursor.execute("UPDATE users SET approval = 1 WHERE user_id = %s", (user_id,))
+        connection.commit()
+
+        # Send the email
+        msg = Message(
+            subject="Congratulations! Your EcoHaven Account Has Been Approved",
+            sender=app.config['MAIL_USERNAME'],
+            recipients=[recipient_email]
+        )
+        msg.body = message_content
+        mail.send(msg)
+        print(f"Email successfully sent to {recipient_email}")
+        
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        cursor.close()
+        connection.close()
+    
+    return redirect(url_for('admin_management_requestAcc_seller',error = "notif successful"))

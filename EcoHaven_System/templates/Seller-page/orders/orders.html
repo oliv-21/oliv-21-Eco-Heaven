@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <title>EcoHaven Orders</title>
+    <link rel="stylesheet" href="../../../static/thumbnail/seller-page/orders/orders.css">
+    <script src="/static/js-seller/error-message.js"></script>
+    <script src=""></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <img class="logo" src="../../static/thumbnail/logo.png.png" alt="">
+        </div>
+        <div class="profile-container" onclick="window.location.href='/seller/profile'">
+            <img class="profile-img" src="{{ url_for('static', filename='uploads/' + profile_pic) }}" alt="Profile Picture"> 
+            <span id="user-name">{{ username }}</span>
+            <a href=" /seller-notification "><i class="fas fa-bell"></i></a>
+         </div>  
+    </div>
+
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <a href="/seller_dashboard"><li >Dashboard</li></a>
+                <a href="/seller-page/products"><li    >Products</li></a>
+                <a href="/seller/update-stock"><li > Stocks</li> </a>
+                <a href="/seller/sales"><li  >Sales</li></a>
+                <a href="/seller/orders"><li  class="active"  >Orders</li></a>
+            </ul>
+        </nav>
+        <a class="chatbtn" href=" /chat-seller "><i class="fas fa-comments"></i> Chat</a>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <nav class="navbar-container"> 
+                <ul class="navbar">
+                    <li><a class="nav-active" href="{{ url_for('orders') }}">Orders (All)</a></li>
+                    <li><a href="{{ url_for('toship') }}">To Ship</a></li>
+                    <li><a href="{{ url_for('shipping') }}">Shipping</a></li>
+                    <li><a href="/seller/orders_completed">Completed</a></li>
+                    <li><a href="{{ url_for('cancelled') }}">Cancellation</a></li>
+                </ul>
+            </nav>
+ 
+    
+            {% if products %}
+                 {% for product in products %}
+                    {% if product.order_status == 'Pending' %}   
+                    <div class="product-container">
+                        <div class="shop-name-header" onclick="window.location.href='/seller/report/{{ product.buyer_id }}'">     
+                            <img class="buyer-profile" src="{{ url_for('static', filename='uploads/' + product.profile_pic) }}" alt="">
+                            <span id="buyer-username">{{ product.email }}</span>
+                        </div>
+
+                        <div class="item-container">                                     
+
+                            <div class="column-1"> <img class="item-img" src="{{ url_for('static', filename='uploads/' + product.Image) }}" alt=""> </div>
+
+                            <div class="column-name"> {{ product.Product_Name }} </div>
+
+                            <div class="column"> {{ product.quantity }} </div>
+
+                            <div class="column"> &#8369;{{ product.total_price }}</div>
+
+                            <!-- Cancel Modal -->
+                            <!-- Simplified Cancel Modal -->
+                            <div id="cancelReasonModal" class="simple-modal">
+                                <div class="simple-modal-content">
+                                    <span class="close-btn" onclick="closeCancelModal()">&times;</span>
+                                    <h3>Cancel Order</h3>
+                                    <p>Please select a reason for cancellation:</p>
+                                    <form action="{{ url_for('update_order_status_cancelled') }}" method="POST" onsubmit="return validateCancelReason();">
+                                        <input type="hidden" name="order_id" id="modalOrderId">
+                                        <select id="cancelReason" name="cancel_reason" class="simple-select">
+                                            <option value="" disabled selected>Select a reason</option>
+                                            <option value="Out of Stock">Out of Stock</option>
+                                            <option value="Shipping Issues">Shipping Issues</option>
+                                            <option value="Pricing Error">Pricing Error</option>
+                                            <option value="Customer Requested Cancellation">Customer Requested Cancellation</option>
+                                            <option value="Product Defect">Product Defect</option>
+                                            <option value="Order Incorrectly Processed">Order Incorrectly Processed</option>
+                                            <option value="Fraudulent Order">Fraudulent Order</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                        <button type="submit" class="submit-btn">Submit</button>
+                                    </form>
+                                </div>
+                            </div>
+
+
+                            <!-- Trigger Modal in Order -->
+                            <div class="column-action"> 
+                                {% if product.order_status == 'Pending' %}
+                                    <div>
+                                        <form action="{{ url_for('update_order_status_approved') }}" method="POST" onsubmit="return confirm();">
+                                            <input type="hidden" name="order_id" value="{{ product.order_id }}">
+                                            <button type="submit" class="accept-btn">Accept</button>
+                                        </form>
+                                    </div>
+                                    <div>
+                                        <button class="cancel-btn" onclick="openCancelModal('{{ product.order_id }}')">Cancel</button>
+                                    </div>
+                                {% endif %}                        
+                            </div>
+
+                            
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <p>No products available.</p>
+            {% endif %}
+           
+            
+        </main>
+    </div>
+
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <p id="modalMessage"></p>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <script>
+        function cancelled() {
+            return confirm("Are you sure you want to cancel this order?");
+        }
+        function confirm() {
+            return confirm("Are you sure ?");
+        }
+
+        function openCancelModal(orderId) {
+        const modal = document.getElementById('cancelReasonModal');
+        modal.style.display = 'block';
+        document.getElementById('modalOrderId').value = orderId;
+        }
+
+        function closeCancelModal() {
+            const modal = document.getElementById('cancelReasonModal');
+            modal.style.display = 'none';
+        }
+
+        function validateCancelReason() {
+            const reason = document.getElementById('cancelReason').value;
+            if (!reason) {
+                alert("Please select a reason for cancellation.");
+                return false;
+            }
+            return confirm("Are you sure you want to cancel this order?");
+        }
+
+    </script>
+
+    
+</body>
+
+</html>
